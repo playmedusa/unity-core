@@ -1,0 +1,227 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public static class ExtensionMethods
+{
+	public static Vector3 ToViewportPointProjected(this Vector3 worldPos, Camera camera)
+	{
+		Vector3 camNormal = camera.transform.forward;
+		Vector3 vectorFromCam = worldPos - camera.transform.position;
+		float camNormDot = Vector3.Dot(camNormal, vectorFromCam);
+		if (camNormDot <= 0)
+		{
+			// we are behind the camera forward facing plane, project the position in front of the plane
+			Vector3 proj = (camNormal * camNormDot * 1.01f);
+			worldPos = camera.transform.position + (vectorFromCam - proj);
+		}
+		Vector3 projectedPosition = camera.WorldToViewportPoint(worldPos);
+		projectedPosition.z = camNormDot;
+
+		return projectedPosition;
+	}
+
+	public static Vector3 GetEmptySpacePoint(this Vector3 pivot, float searchRadius, float freeSpaceRadius = 5)
+	{
+		Vector3 p = Vector3.zero;
+		Collider[] hitColliders = null;
+		int tries = 0;
+		do
+		{
+			tries++;
+			p = pivot + Random.onUnitSphere * searchRadius;
+			hitColliders = Physics.OverlapSphere(p, freeSpaceRadius);
+		} while (hitColliders.Length > 0 && tries < 100);
+		return tries >= 100 ? Vector3.zero : p;
+	}
+
+	public static Vector3 GetRandomPointOnMeshSurface(this GameObject target, out Vector3 normal)
+	{
+		return target.GetRandomPointOnMeshSurface(Vector3.zero, out normal);
+	}
+
+	public static Vector3 GetRandomPointOnMeshSurface(this GameObject target, Vector3 offset, out Vector3 normal)
+	{
+		Bounds bounds = target.GetComponent<Renderer>().bounds;
+		Vector3 sph = Random.onUnitSphere;
+		Vector3 right = target.transform.right * sph.x * bounds.size.magnitude;
+		Vector3 up = target.transform.up * sph.y * bounds.size.magnitude;
+		Vector3 from = target.transform.position + right + up + offset;
+		Vector3 towardsCenter = target.transform.position - from + offset;
+		RaycastHit[] hits = Physics.RaycastAll(from, towardsCenter.normalized, towardsCenter.magnitude);
+		for (int i = 0; i < hits.Length; i++)
+		{
+			if (hits[i].collider.gameObject == target)
+			{
+				Debug.DrawLine(from, hits[i].point, Color.magenta, 5);
+				normal = hits[i].normal;
+				return hits[i].point;
+			}
+		}
+		normal = Vector3.zero;
+		return Vector3.zero;
+	}
+
+	public static float Map(this float value, float from1, float to1, float from2, float to2)
+	{
+		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+	}
+
+	private static System.Random rng = new System.Random();
+	public static void Shuffle<T>(this IList<T> list)
+	{
+		int n = list.Count;
+		while (n > 1)
+		{
+			n--;
+			int k = rng.Next(n + 1);
+			T value = list[k];
+			list[k] = list[n];
+			list[n] = value;
+		}
+	}
+
+	#region Tweening
+	public static Coroutine StartCoroutine(this UnityEngine.GameObject obj, IEnumerator coroutine)
+	{
+		MonoBehaviour mb = obj.GetComponent<MonoBehaviour>();
+		if (mb == null)
+			mb = obj.AddComponent<MonoBehaviour>();
+		return mb.StartCoroutine(coroutine);
+	}
+
+	public static IEnumerator Tween01(this UnityEngine.Object obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	{
+		float elapsedTime = 0;
+		while (elapsedTime < animationTime)
+		{
+			step(elapsedTime / animationTime);
+			elapsedTime += Time.deltaTime;
+			yield return 0;
+		}
+		step(1);
+		if (callback != null)
+			callback();
+	}
+
+	public static Coroutine DoTween01(this UnityEngine.Component c, System.Action<float> step, float animationTime, System.Action callback = null)
+	{
+		return c.gameObject.DoTween01(step, animationTime, callback);
+	}
+
+	public static Coroutine DoTween01(this UnityEngine.GameObject obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	{
+		IEnumerator tween = obj.Tween01(step, animationTime, callback);
+		return obj.StartCoroutine(tween);
+	}
+
+	public static float CatmullLerp(this float[] values, float t)
+	{
+		float timePerSegment = 1.0f / (values.Length - 1);
+		float timeInSegment = t / timePerSegment;
+		timeInSegment = timeInSegment - (int)timeInSegment;
+
+		float p = (float)(values.Length - 1) * t;
+
+		float a = p - 1;
+		float b = p;
+		float c = p + 1;
+		float d = p + 2;
+
+		a = a < 0 ? 0 : a;
+		b = b < values.Length ? b : values.Length - 1;
+		c = c < values.Length ? c : values.Length - 1;
+		d = d < values.Length ? d : values.Length - 1;
+
+		float p0 = values[(int)a];
+		float p1 = values[(int)b];
+		float p2 = values[(int)c];
+		float p3 = values[(int)d];
+
+		return CatmullRom(p0, p1, p2, p3, timeInSegment, 1.0f, 1.0f);
+	}
+
+	public static Vector3 CatmullLerp(this Vector3[] points, float t)
+	{
+		t = Mathf.Clamp01(t);
+		float timePerSegment = 1.0f / (points.Length - 1);
+		float timeInSegment = t / timePerSegment;
+		timeInSegment = timeInSegment - (int)timeInSegment;
+
+		float p = Mathf.Floor((float)(points.Length - 1) * t);
+
+		float a = p - 1;
+		float b = p;
+		float c = p + 1;
+		float d = p + 2;
+
+		a = a < 0 ? 0 : a;
+		b = b < points.Length ? b : points.Length - 1;
+		c = c < points.Length ? c : points.Length - 1;
+		d = d < points.Length ? d : points.Length - 1;
+
+		Vector3 p0 = points[(int)a];
+		Vector3 p1 = points[(int)b];
+		Vector3 p2 = points[(int)c];
+		Vector3 p3 = points[(int)d];
+
+		return CatmullRom(p0, p1, p2, p3, timeInSegment, 1.0f, 1.0f);
+	}
+
+	static Vector3 CatmullRom(Vector3 previous, Vector3 start, Vector3 end, Vector3 next,
+								float elapsedTime, float duration, float tension)
+	{
+		// References used:
+		// p.266 GemsV1
+		//
+		// tension is often set to 0.5 but you can use any reasonable value:
+		// http://www.cs.cmu.edu/~462/projects/assn2/assn2/catmullRom.pdf
+		//
+		// bias and tension controls:
+		// http://local.wasp.uwa.edu.au/~pbourke/miscellaneous/interpolation/
+
+		float percentComplete = elapsedTime / duration;
+		float percentCompleteSquared = percentComplete * percentComplete;
+		float percentCompleteCubed = percentCompleteSquared * percentComplete;
+
+		return (previous * (-0.5f * percentCompleteCubed +
+								   percentCompleteSquared -
+							0.5f * percentComplete) +
+				start * (1.5f * percentCompleteCubed +
+						   -2.5f * percentCompleteSquared + 1.0f) +
+				end * (-1.5f * percentCompleteCubed +
+							2.0f * percentCompleteSquared +
+							0.5f * percentComplete) +
+				next * (0.5f * percentCompleteCubed -
+							0.5f * percentCompleteSquared));
+	}
+
+	static float CatmullRom(float previous, float start, float end, float next,
+								float elapsedTime, float duration, float tension)
+	{
+		// References used:
+		// p.266 GemsV1
+		//
+		// tension is often set to 0.5 but you can use any reasonable value:
+		// http://www.cs.cmu.edu/~462/projects/assn2/assn2/catmullRom.pdf
+		//
+		// bias and tension controls:
+		// http://local.wasp.uwa.edu.au/~pbourke/miscellaneous/interpolation/
+
+		float percentComplete = elapsedTime / duration;
+		float percentCompleteSquared = percentComplete * percentComplete;
+		float percentCompleteCubed = percentCompleteSquared * percentComplete;
+
+		return (previous * (-0.5f * percentCompleteCubed +
+								   percentCompleteSquared -
+							0.5f * percentComplete) +
+				start * (1.5f * percentCompleteCubed +
+						   -2.5f * percentCompleteSquared + 1.0f) +
+				end * (-1.5f * percentCompleteCubed +
+							2.0f * percentCompleteSquared +
+							0.5f * percentComplete) +
+				next * (0.5f * percentCompleteCubed -
+							0.5f * percentCompleteSquared));
+	}
+	#endregion
+}
