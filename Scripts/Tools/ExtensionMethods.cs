@@ -81,6 +81,49 @@ public static class ExtensionMethods
 		}
 	}
 
+	public static GameObject InstanceFromPool(this GameObject prefab, int poolSize, Transform parent)
+	{
+		GameObject instance = FXPool.getFXObject(prefab, poolSize);
+		instance.transform.parent = parent;
+		instance.SetActive(true);
+		return instance;
+	}
+
+	public static GameObject InstanceFromPool(this GameObject[] prefabArray, int maxIndex, int poolSize, Transform parent)
+	{
+		GameObject prefab = prefabArray[
+			Random.Range(
+				0,
+				Mathf.Clamp(maxIndex, 0, prefabArray.Length)
+			)];
+		GameObject instance = FXPool.getFXObject(prefab, poolSize);
+		instance.transform.parent = parent;
+		instance.SetActive(true);
+		return instance;
+	}
+
+	public static int RouletteWheel(this float[] slots)
+	{
+		int slotsCount = slots.Length;
+		float sum = 0;
+
+		for (int i = 0; i < slotsCount; i++)
+		{
+			sum += slots[i];
+		}
+
+		float goal = Random.Range(0f, sum);
+		float delta = 0;
+		int slotIndex = 0;
+		while (slotIndex < slotsCount && delta < goal)
+		{
+			delta += slots[slotIndex];
+			slotIndex++;
+		}
+
+		return slotIndex > 0 ? slotIndex - 1 : 0;
+	}
+
 	#region Tweening
 	public static Coroutine StartCoroutine(this UnityEngine.GameObject obj, IEnumerator coroutine)
 	{
