@@ -24,6 +24,8 @@ public class StateViewManager : FSM<StateViewManager.state>
 			return _instance;
 		}
 	}
+
+	[Header("Basic views")]
 	public StateView initialyOpen;
 	public StateView staticView;
 
@@ -58,14 +60,24 @@ public class StateViewManager : FSM<StateViewManager.state>
 	{
 		if (idc != null)
 			SetUsingMouse(idc.currentDevice.inputDevice == InputDevice.Keyboard);
+		else
+			isUsingMouse = true;
 
 		if (isUsingMouse)
 		{
-			Cursor.visible = currentView.showMouse;
-			Cursor.lockState =
-				currentView.showMouse ?
-					CursorLockMode.None :
-					CursorLockMode.Locked;
+			if (currentView != null)
+			{
+				Cursor.visible = currentView.showMouse;
+				Cursor.lockState =
+					currentView.showMouse ?
+						CursorLockMode.None :
+						CursorLockMode.Locked;
+			}
+			else
+			{
+				Cursor.visible = true;
+				Cursor.lockState = CursorLockMode.None;
+			}
 		}
 		else
 		{
@@ -122,6 +134,12 @@ public class StateViewManager : FSM<StateViewManager.state>
 			done = false;
 
 			HandleStaticViewVisibility();
+
+			if (currentView == null)
+			{
+				ChangeState(state.idle);
+				yield break;
+			}
 
 			currentView.Show(() =>
 			{
