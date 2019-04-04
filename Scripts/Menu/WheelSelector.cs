@@ -30,13 +30,13 @@ public class WheelSelector : InputHandler
 			transform.up * idc.raw(Actuator.Pitch);
 		if (input.magnitude < 0.5f) return;
 
-		float screenRatio = (float)canvas.worldCamera.pixelHeight / 1080f;
+		//float screenRatio = (float)canvas.worldCamera.pixelHeight / 1080f;
 		input = Vector3.Normalize(input) * radius * canvas.transform.localScale.y;// * screenRatio;
 		if (input.magnitude > 0.1f)
 			selector.localRotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(Vector3.up, lastInput, -Vector3.forward) + (Random.value - 0.5f) * 0.01f);
 		lastInput = Vector3.Lerp(lastInput, input, Time.deltaTime * 20); // Smooth (to release the stick)
 		Vector3 canvasPos = transform.position + lastInput;
-		Vector3 screenPos = RectTransformUtility.PixelAdjustPoint(canvasPos, transform, canvas);
+		//Vector3 screenPos = RectTransformUtility.PixelAdjustPoint(canvasPos, transform, canvas);
 
 #if UNITY_EDITOR
 		Debug.DrawLine(transform.position, canvasPos, Color.yellow);

@@ -1,0 +1,36 @@
+﻿{
+    "Loading": "Loading",
+    "Hello {0}, how are you today?": "Hello {0}, how are you today?",
+    "Combo: {0}x": "Combo {0}x",
+    "You have one cat": {
+        "zero": "You have no cats",
+        "one": "You have one cat",
+        "other": "You have a lot of cats!"
+    },
+    "You found {0} item": {
+        "zero": "No items found",
+        "one": "You found one item",
+        "other": "You found {0} items"
+    },
+    "{0} credits": {
+        "zero": "No credits",
+        "one": "{0} credit",
+        "other": "{0} credits"
+    },
+    "Score: {0} points": {
+        "zero": "nada",
+        "one": "Score: {0} point",
+        "other": "Score: {0} point"
+    },
+    "Level {1} time: {0}": "Level {1} time: {0}",
+    "Hit": {
+        "zero": "hit!",
+        "one": "-{0}",
+        "other": "-{0}"
+    },
+    "There is one monkey in the {1}": {
+        "zero": "There are no monkeys in the {1}.",
+        "one": "There is one monkey in the {1}.",
+        "other": "There are {0} monkeys in the {1}!"
+    }
+}
