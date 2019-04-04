@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.Events;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -24,11 +25,20 @@ public class SceneLoader : MonoBehaviour
 
 	CanvasGroup fadeCanvasGroup;
 	public AudioSource music;
+	public float timeOut;
+	public UnityEvent onTimeOut;
 
 	void Awake()
 	{
 		fadeCanvasGroup = GetComponent<CanvasGroup>();
 		StartCoroutine(FadeIn());
+		if (onTimeOut != null)
+			Invoke("TimeOut", timeOut);
+	}
+
+	void TimeOut()
+	{
+		onTimeOut.Invoke();
 	}
 
 	public void Load(string sceneName)
