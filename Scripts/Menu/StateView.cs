@@ -22,6 +22,7 @@ public class StateView : FSM<StateView.state>
 	public bool showMouse;
 	public bool showCursor;
 	public GameObject m_PreviouslySelected;
+	public float animationTime = 1;
 
 	public bool isReady
 	{
@@ -44,16 +45,19 @@ public class StateView : FSM<StateView.state>
 
 	virtual protected void Awake()
 	{
-		if (ui != null)
+		if (ui == null)
 		{
-			canvasGroup = ui.GetComponent<CanvasGroup>();
-			if (canvasGroup != null)
-			{
-				canvasGroup.alpha = 0;
-				canvasGroup.interactable = false;
-			}
-			ui.anchoredPosition = Vector2.zero;
+			ui = GetComponent<RectTransform>();
 		}
+
+		canvasGroup = ui.GetComponent<CanvasGroup>();
+		if (canvasGroup != null)
+		{
+			canvasGroup.alpha = 0;
+			canvasGroup.interactable = false;
+		}
+		ui.anchoredPosition = Vector2.zero;
+
 	}
 
 	public void Show(UnityAction callback = null)
@@ -113,7 +117,7 @@ public class StateView : FSM<StateView.state>
 			yield return this.DoTween01(t =>
 			{
 				canvasGroup.alpha = Mathf.Lerp(0, 1, t);
-			}, 1);
+			}, animationTime);
 		}
 		yield break;
 	}
@@ -130,7 +134,7 @@ public class StateView : FSM<StateView.state>
 			yield return this.DoTween01(t =>
 			{
 				canvasGroup.alpha = Mathf.Lerp(1, 0, t);
-			}, 0.5f);
+			}, animationTime * 0.5f);
 			canvasGroup.interactable = false;
 		}
 		yield break;

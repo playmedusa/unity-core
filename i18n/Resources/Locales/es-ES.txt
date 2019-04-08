@@ -1,13 +1,11 @@
 ﻿{
-    "Loading": "Loading",
-	"Play": "Play",
-	"Profile": "Profile",
-	"Credits": "Credits",
-	"Back": "Back",
-	
-	"Welcome": "Welcome",
-
-	"Time's up": "Time's up",
+    "Loading": "Cargando",
+	"Play": "Jugar",
+	"Profile": "Perfil",
+	"Credits": "Créditos",
+	"Back": "Volver",
+	"Welcome": "Bienvenido",
+	"Time's up": "¡Fin del turno!",
 
     "Hello {0}, how are you today?": "Hello {0}, how are you today?",
     "Combo: {0}x": "Combo {0}x",
