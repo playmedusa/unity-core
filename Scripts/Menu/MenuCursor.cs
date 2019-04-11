@@ -82,7 +82,7 @@ public class MenuCursor : InputHandler
 			{
 				buttonAnimation.ChangeState(ButtonAnimation.state.Idle);
 			}
-			else
+			/*else
 			{
 				RectTransform rt = selectedGameObject.GetComponent<RectTransform>();
 				rt.GetComponent<MonoBehaviour>().StopAllCoroutines();
@@ -92,6 +92,7 @@ public class MenuCursor : InputHandler
 					rt.localScale = Vector3.one + Vector3.one * 0.25f * (1 - scale);
 				}, 0.25f);
 			}
+			*/
 		}
 
 		selectedGameObject = target;
@@ -100,7 +101,7 @@ public class MenuCursor : InputHandler
 			if (highlightClip != null)
 				AudioInstance.PlayClipAtPoint(highlightClip, Vector3.zero);
 			transform.position = target.transform.position;
-			ResizeToTarget(target);
+			//ResizeToTarget(target);
 			AnimatedButton animatedButton = selectedGameObject.GetComponent<AnimatedButton>();
 			if (animatedButton != null)
 			{
@@ -113,12 +114,14 @@ public class MenuCursor : InputHandler
 				{
 					animators[i].SetTrigger("enter");
 				}
+				/*
 				RectTransform rt = selectedGameObject.GetComponent<RectTransform>();
 				rt.DoTween01(t =>
 				{
 					float scale = PennerAnimation.BackEaseOut(t, 0, 1, 1);
 					rt.localScale = Vector3.one + Vector3.one * 0.25f * scale;
 				}, 0.75f);
+				*/
 			}
 		}
 		else
@@ -155,6 +158,7 @@ public class MenuCursor : InputHandler
 		AnimatedButton ab = selectedGameObject.GetComponent<AnimatedButton>();
 		if (ab == null)
 		{
+			/*
 			RectTransform rt = selectedGameObject.GetComponent<RectTransform>();
 			rt.DoTween01(t =>
 			{
@@ -170,6 +174,7 @@ public class MenuCursor : InputHandler
 				{
 				});
 			});
+			*/
 		}
 		else
 		{
