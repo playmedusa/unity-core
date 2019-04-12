@@ -11,6 +11,7 @@
 	"YourName": "Your name",
 	"YourDock": "Your dock",
 	"Country": "Country",
+	"Highscore": "Highscore",
 
 	"Belgium": "Belgium",
 	"Cyprus": "Cyprus",

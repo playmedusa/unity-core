@@ -11,6 +11,7 @@
 	"YourName": "Tu nombre",
 	"YourDock": "Tu puerto",
 	"Country": "País",
+	"Highscore": "Récord",
 
 	"Belgium": "Belgica",
 	"Cyprus": "Chipre",
