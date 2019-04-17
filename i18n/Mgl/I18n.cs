@@ -99,6 +99,11 @@ namespace Mgl
 			return instance.__(key, args);
 		}
 
+		public static string T(string key, params object[] args)
+		{
+			return instance.__(key, args).ToUpper();
+		}
+
 		public string __(string key, params object[] args)
 		{
 			if (translationData == null)

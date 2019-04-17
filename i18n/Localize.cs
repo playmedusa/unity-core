@@ -7,6 +7,7 @@ using Mgl;
 public class Localize : MonoBehaviour
 {
 	public string label;
+	public bool upperCase;
 
 	public Vector3[] positionFix;
 	public Vector2[] sizeFix;
@@ -27,11 +28,11 @@ public class Localize : MonoBehaviour
 	{
 		if (label.Length > 0)
 		{
-			textLabel.text = I18n.t(label);
+			textLabel.text = upperCase ? I18n.T(label) : I18n.t(label);
 		}
 		else if (textLabel.text.Length > 0)
 		{
-			textLabel.text = I18n.t(textLabel.text);
+			textLabel.text = upperCase ? I18n.T(textLabel.text) : I18n.t(textLabel.text);
 		}
 
 		if (positionFix.Length > 0)
