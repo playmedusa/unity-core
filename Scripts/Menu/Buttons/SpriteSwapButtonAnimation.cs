@@ -10,6 +10,7 @@ public class SpriteSwapButtonAnimation : ButtonAnimation
 	public float innerTextPressedOffset;
 
 	public float innerTextVerticalPivot;
+	public FXSO buttonClickFX;
 
 	Text buttonText;
 	Image buttonImage;
@@ -32,6 +33,8 @@ public class SpriteSwapButtonAnimation : ButtonAnimation
 
 	void SetPressedImage()
 	{
+		buttonClickFX.RaiseFX(transform.position, Quaternion.identity);
+
 		buttonImage.sprite = pressedImage;
 		Vector3 p = buttonText.transform.localPosition;
 		p.y = innerTextVerticalPivot - innerTextPressedOffset;
