@@ -33,8 +33,6 @@ public class SpriteSwapButtonAnimation : ButtonAnimation
 
 	void SetPressedImage()
 	{
-		buttonClickFX.RaiseFX(transform.position, Quaternion.identity);
-
 		buttonImage.sprite = pressedImage;
 		Vector3 p = buttonText.transform.localPosition;
 		p.y = innerTextVerticalPivot - innerTextPressedOffset;
@@ -59,6 +57,7 @@ public class SpriteSwapButtonAnimation : ButtonAnimation
 
 	override public IEnumerator Press()
 	{
+		buttonClickFX.RaiseFX(transform.position, Quaternion.identity);
 		SetPressedImage();
 		while (currentState == state.Press)
 			yield return 0;
