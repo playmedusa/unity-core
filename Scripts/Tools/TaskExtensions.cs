@@ -1,5 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using System.Collections;
+
+//Reference http://www.stevevermeulen.com/index.php/2017/09/using-async-await-in-unity3d-2017/
 
 public static class TaskExtensions
 {
@@ -39,5 +42,18 @@ public static class TaskExtensions
 		if (waitTask != await Task.WhenAny(waitTask,
 				Task.Delay(timeout)))
 			throw new TimeoutException();
+	}
+
+	public static IEnumerator AsIEnumerator(this Task task)
+	{
+		while (!task.IsCompleted)
+		{
+			yield return null;
+		}
+
+		if (task.IsFaulted)
+		{
+			throw task.Exception;
+		}
 	}
 }

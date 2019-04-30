@@ -23,6 +23,7 @@ public class StateView : FSM<StateView.state>
 	public bool showCursor;
 	public GameObject m_PreviouslySelected;
 	public float animationTime = 1;
+	public StateViewManager svm;
 
 	public bool isReady
 	{
@@ -43,6 +44,11 @@ public class StateView : FSM<StateView.state>
 	protected CanvasGroup canvasGroup;
 	bool viewReady;
 
+	void OnValidate()
+	{
+		if (svm == null)
+			svm = GetComponentInParent<StateViewManager>();
+	}
 	virtual protected void Awake()
 	{
 		if (ui == null)
@@ -57,7 +63,6 @@ public class StateView : FSM<StateView.state>
 			canvasGroup.interactable = false;
 		}
 		ui.anchoredPosition = Vector2.zero;
-
 	}
 
 	public void Show(UnityAction callback = null)

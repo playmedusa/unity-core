@@ -106,6 +106,8 @@ namespace Mgl
 
 		public string __(string key, params object[] args)
 		{
+			if (key.Length == 0) return "";
+
 			if (translationData == null)
 			{
 				InitConfig();
