@@ -20,23 +20,31 @@ public class SpriteSwapButtonAnimation : ButtonAnimation
 		animationTime = 0.1f;
 		buttonImage = GetComponent<Image>();
 		buttonText = GetComponentInChildren<Text>();
-		innerTextVerticalPivot = buttonText.transform.localPosition.y;
+		if (buttonText != null)
+			innerTextVerticalPivot = buttonText.transform.localPosition.y;
 	}
 
 	void SetReleasedImage()
 	{
+		Debug.Log(name);
 		buttonImage.sprite = releasedImage;
-		Vector3 p = buttonText.transform.localPosition;
-		p.y = innerTextVerticalPivot;
-		buttonText.transform.localPosition = p;
+		if (buttonText != null)
+		{
+			Vector3 p = buttonText.transform.localPosition;
+			p.y = innerTextVerticalPivot;
+			buttonText.transform.localPosition = p;
+		}
 	}
 
 	void SetPressedImage()
 	{
 		buttonImage.sprite = pressedImage;
-		Vector3 p = buttonText.transform.localPosition;
-		p.y = innerTextVerticalPivot - innerTextPressedOffset;
-		buttonText.transform.localPosition = p;
+		if (buttonText != null)
+		{
+			Vector3 p = buttonText.transform.localPosition;
+			p.y = innerTextVerticalPivot - innerTextPressedOffset;
+			buttonText.transform.localPosition = p;
+		}
 	}
 
 	override public IEnumerator Idle()
