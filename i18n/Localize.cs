@@ -26,6 +26,14 @@ public class Localize : MonoBehaviour
 
 	void Awake()
 	{
+		if (textLabel != null)
+		{
+			LocalizeTextLabel();
+		}
+	}
+
+	void LocalizeTextLabel()
+	{
 		if (label.Length > 0)
 		{
 			textLabel.text = upperCase ? I18n.T(label) : I18n.t(label);
@@ -52,3 +60,4 @@ public class Localize : MonoBehaviour
 		}
 	}
 }
+
