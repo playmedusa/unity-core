@@ -26,7 +26,6 @@ public class SpriteSwapButtonAnimation : ButtonAnimation
 
 	void SetReleasedImage()
 	{
-		Debug.Log(name);
 		buttonImage.sprite = releasedImage;
 		if (buttonText != null)
 		{
