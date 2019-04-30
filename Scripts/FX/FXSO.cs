@@ -35,7 +35,7 @@ public class FXSO : ScriptableObject
 	public AudioClip[] sfxList;
 	public float pitchRange = 0;
 
-	public void RaiseFX(Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
+	public void Raise(Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
 	{
 		if (sfx != null)
 		{

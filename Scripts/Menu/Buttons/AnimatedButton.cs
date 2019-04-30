@@ -14,7 +14,7 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 	{
 		get
 		{
-			return stateView != null && stateView.isReady;
+			return (stateView != null && stateView.isReady) || stateView == null;
 		}
 	}
 
@@ -130,7 +130,8 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 		if (isStateViewReady)
 		{
 			Deselect();
-			stateView.m_PreviouslySelected = null;
+			if (stateView != null)
+				stateView.m_PreviouslySelected = null;
 		}
 	}
 
