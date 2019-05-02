@@ -38,10 +38,10 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 	protected override void Awake()
 	{
 		base.Awake();
-		buttonAnimation = GetComponent<ButtonAnimation>();
-		buttonAnimation.SetOwner(this);
-		buttonAnimation.ChangeState(buttonAnimation.currentState);
 		stateView = GetComponentInParent<StateView>();
+		buttonAnimation = GetComponent<ButtonAnimation>();
+		buttonAnimation?.SetOwner(this);
+		buttonAnimation?.ChangeState(buttonAnimation.currentState);
 	}
 
 	override public void Select()
@@ -49,7 +49,8 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 		var newPreviouslySelected = (EventSystem.current != null) ? EventSystem.current.currentSelectedGameObject : null;
 		if (newPreviouslySelected != gameObject)
 			EventSystem.current.SetSelectedGameObject(gameObject);
-		else
+
+		if (newPreviouslySelected == gameObject || MenuCursor.instance == null)
 		{
 			if (IsPressed())
 				buttonAnimation.ChangeState(ButtonAnimation.state.Press);
@@ -63,7 +64,11 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 	{
 		var newPreviouslySelected = (EventSystem.current != null) ? EventSystem.current.currentSelectedGameObject : null;
 		if (newPreviouslySelected == gameObject)
+		{
 			EventSystem.current.SetSelectedGameObject(null);
+			if (MenuCursor.instance == null)
+				buttonAnimation.ChangeState(ButtonAnimation.state.Idle);
+		}
 	}
 
 	public void SetEnabled(bool active)
@@ -105,7 +110,7 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 		{
 			buttonAnimation.ChangeState(ButtonAnimation.state.Click);
 			if (StateViewManager.instance.isUsingMouse)
-				MenuCursor.instance.PlaySelectSound();
+				MenuCursor.instance?.PlaySelectSound();
 		}
 	}
 

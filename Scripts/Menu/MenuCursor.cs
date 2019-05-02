@@ -13,8 +13,6 @@ public class MenuCursor : InputHandler
 		{
 			if (_instance == null)
 				_instance = FindObjectOfType<MenuCursor>();
-			if (_instance == null)
-				Debug.LogError("Menu cursor not found");
 			return _instance;
 		}
 	}
@@ -56,6 +54,8 @@ public class MenuCursor : InputHandler
 
 		if (selectedGameObject != null)
 			transform.position = selectedGameObject.transform.position;
+		else
+			SelectGameObject(null);
 	}
 
 	override public void HandleActuator(Actuator actuator)
@@ -101,7 +101,7 @@ public class MenuCursor : InputHandler
 			if (highlightClip != null)
 				AudioInstance.PlayClipAtPoint(highlightClip, Vector3.zero);
 			transform.position = target.transform.position;
-			//ResizeToTarget(target);
+			CheckVisibility(target);
 			AnimatedButton animatedButton = selectedGameObject.GetComponent<AnimatedButton>();
 			if (animatedButton != null)
 			{
@@ -130,7 +130,7 @@ public class MenuCursor : InputHandler
 		}
 	}
 
-	void ResizeToTarget(GameObject target)
+	void CheckVisibility(GameObject target)
 	{
 		if (StateViewManager.instance.currentView != null && StateViewManager.instance.currentView.showCursor)
 		{

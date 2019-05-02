@@ -19,7 +19,7 @@ public class StateView : FSM<StateView.state>
 	public bool skipAutoselect;
 	public bool showStatic;
 	public bool rememberPreviouslySelected;
-	public bool showMouse;
+	public bool showMouse = true;
 	public bool showCursor;
 	public GameObject m_PreviouslySelected;
 	public float animationTime = 1;

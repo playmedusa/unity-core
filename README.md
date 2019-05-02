@@ -10,22 +10,34 @@ It's build of two base componentes: The InputSystem and the InputDeviceComponent
 ## Recording
 
 # Menu
-The Menu system requires the Input system.
+The menu system includes Menu states and UI view handlind and supports custom animated buttons.
+
+The ```StateViewManager``` and ```StateView``` compose the skeleton for any menu.
+On **Awake**, all ```StateViews``` will reset the anchored position, so the views can be scattered to easily work in edit mode.
+
 A basic hierarchy to work with may be:
  
- - Menu (Canvas + StateViewManager)
-	- Ingame view (StateView)
-	- Pause view (StateView)
-	- GameOver view (StateView)
+ - Menu root (**Canvas** + ```StateViewManager```)
+	- Ingame view (```StateView```)
+	- Pause view (```StateView```)
+	- GameOver view (```StateView```)
 
-Then, we can set up the initial view in the StateViewManager public field.
-By inheriting from the StateView class we can customize the scene-in and scene-out for a certain view.
+Then, we can set up the initial view in the ```StateViewManager``` public field.
+By inheriting from the ```StateView``` class we can customize the scene-in and scene-out for a certain view.
+Changing from one view to another may be easily done with the ```ShowStateView``` method found in the ```StateViewManager``` class.
+
+## AnimatedButton and ButtonAnimation
+The ```AnimatedButton``` class is a customized Unity button that extends the base behaviour to work with the ```ButtonAnimation``` and ```MenuCursor``` clases.
+To create a new custom animation we can inherit from ```AnimatedButton``` and override the **Idle, Select, Press, Release and Click** coroutines. ```BubbleButtonAnimation```, ```SpriteSwapButtonAnimation``` or ```TintButtonAnimation``` are some examples ready to be used.
 
 ## Menu cursor
-The menu cursor requires the Input system, a StateViewManager and a StateView to properly work.
-Each StateView will set if the MenuCursor renders or not.
+This is a helper object that will sync the ```AnimatedButton``` states with the ```EventSystem``` while using a controller. Thus, the menu cursor requires the Input system, a ```StateViewManager``` and a ```StateView``` to properly work.
+The menu cursor will be rendered only if the current ```StateView``` allows it.
 
 ## The static view
+This ```StateView``` can be set up in the ```StateViewManager```. This view will be shown simultaneously with any other view if the ```Show Static``` bool is on.
+
+## Locking views
 
 # FX
 
@@ -39,6 +51,8 @@ It will create a poll for that gameObject with the desired length (if it doesn't
 
 #### RouletteWheel
 From any given weights float array, launches a roulette and returns the winner's index.
+
+#### TaskExtensions
 
 ## Object pooling
 ## FSM
