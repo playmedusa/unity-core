@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 //Reference http://www.stevevermeulen.com/index.php/2017/09/using-async-await-in-unity3d-2017/
 
@@ -55,5 +56,10 @@ public static class TaskExtensions
 		{
 			throw task.Exception;
 		}
+	}
+
+	public static TaskAwaiter GetAwaiter(this TimeSpan timeSpan)
+	{
+		return Task.Delay(timeSpan).GetAwaiter();
 	}
 }
