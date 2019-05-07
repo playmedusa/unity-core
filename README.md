@@ -1,6 +1,6 @@
 # unity-core
 ## Setting this project as git submodule
-Example to add this repository as a submodule to a existing unity project:
+Example to add this repository as a submodule to an existing unity project:
 ```
 git submodule add https://github.com/playmedusa/unity-core.git  Assets/unity-core
 ```
@@ -14,6 +14,8 @@ Finally, to pull new commits:
 ```
 git pull --recurse-submodules
 ```
+
+Note: This repo requires Scripting Runtime Version set to .NET 4.x in Unity Player Settings.
 
 # Events
 
