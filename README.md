@@ -1,4 +1,19 @@
 # unity-core
+## Setting this project as git submodule
+Example to add this repository as a submodule to a existing unity project:
+```
+git submodule add https://github.com/playmedusa/unity-core.git  Assets/unity-core
+```
+
+If you are clonning the unity project you need to init the existing submodules:
+```
+git submodule update --init --recursive
+```
+
+Finally, to pull new commits:
+```
+git pull --recurse-submodules
+```
 
 # Events
 
