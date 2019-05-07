@@ -14,6 +14,7 @@ public class StateView : FSM<StateView.state>
 		stop
 	}
 
+	[Header("StateView config")]
 	public RectTransform ui;
 
 	public bool skipAutoselect;
