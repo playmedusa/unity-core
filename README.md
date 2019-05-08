@@ -43,6 +43,9 @@ Then, we can set up the initial view in the ```StateViewManager``` public field.
 By inheriting from the ```StateView``` class we can customize the scene-in and scene-out for a certain view.
 Changing from one view to another may be easily done with the ```ShowStateView``` method found in the ```StateViewManager``` class.
 
+By default, the ```StateView``` class will try to fade in and out views looking for a CanvasGroup.
+To change this behaviour, just use inheritance and override the ```Open``` and ```Close``` coroutines.
+
 ## AnimatedButton and ButtonAnimation
 The ```AnimatedButton``` class is a customized Unity button that extends the base behaviour to work with the ```ButtonAnimation``` and ```MenuCursor``` clases.
 To create a new custom animation we can inherit from ```AnimatedButton``` and override the **Idle, Select, Press, Release and Click** coroutines. ```BubbleButtonAnimation```, ```SpriteSwapButtonAnimation``` or ```TintButtonAnimation``` are some examples ready to be used.
