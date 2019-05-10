@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,6 +46,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 	}
 
 	InputDeviceComponent idc;
+	UnityAction newStateView;
 
 	void Start()
 	{
@@ -85,6 +87,13 @@ public class StateViewManager : FSM<StateViewManager.state>
 		}
 	}
 
+	public void ShowStateView(StateView nextView, bool lockView, UnityAction callback)
+	{
+		if (this.lockView) return;
+		this.newStateView = callback;
+		ShowStateView(nextView, lockView);
+	}
+
 	public void ShowStateView(StateView nextView, bool lockView)
 	{
 		if (this.lockView) return;
@@ -93,9 +102,20 @@ public class StateViewManager : FSM<StateViewManager.state>
 		ChangeState(state.showView);
 	}
 
+	public void ShowStateView(StateView nextView, UnityAction callback = null)
+	{
+		this.newStateView = callback;
+		ShowStateView(nextView);
+	}
 	public void ShowStateView(StateView nextView)
 	{
 		ShowStateView(nextView, false);
+	}
+
+	public void UnlockAndShowStateView(StateView nextView, UnityAction callback = null)
+	{
+		this.newStateView = callback;
+		UnlockAndShowStateView(nextView);
 	}
 
 	public void UnlockAndShowStateView(StateView nextView)
@@ -148,23 +168,13 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 			yield return new WaitUntil(() => done);
 
+			CallCallback();
 			SelectBestCandidate();
 
 			if (currentView == nextView)
 			{
 				ChangeState(state.idle);
 			}
-		}
-	}
-
-	void HandleStaticViewVisibility()
-	{
-		if (staticView != null)
-		{
-			if (currentView.showStatic && !staticView.isOpen)
-				staticView.Show();
-			else if (!currentView.showStatic && staticView.isOpen)
-				staticView.Hide();
 		}
 	}
 
@@ -183,6 +193,23 @@ public class StateViewManager : FSM<StateViewManager.state>
 			if (idc != null && idc.raw(Actuator.ForwardAxis) != 0)
 				SetUsingMouse(false);
 			yield return 0;
+		}
+	}
+
+	void CallCallback()
+	{
+		newStateView?.Invoke();
+		newStateView = null;
+	}
+
+	void HandleStaticViewVisibility()
+	{
+		if (staticView != null)
+		{
+			if (currentView.showStatic && !staticView.isOpen)
+				staticView.Show();
+			else if (!currentView.showStatic && staticView.isOpen)
+				staticView.Hide();
 		}
 	}
 
