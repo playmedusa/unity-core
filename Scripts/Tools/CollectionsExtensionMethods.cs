@@ -90,4 +90,19 @@ public static class CollectionsExtensionMethods
 
 		return slotIndex > 0 ? slotIndex - 1 : 0;
 	}
+
+	public static int GetChildIndex(this Transform transform, GameObject child)
+	{
+		int index = -1;
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			var t = transform.GetChild(i);
+			if (t.gameObject == child)
+			{
+				index = i;
+				break;
+			}
+		}
+		return index;
+	}
 }
