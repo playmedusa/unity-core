@@ -35,15 +35,19 @@ public class FXSO : ScriptableObject
 	public AudioClip[] sfxList;
 	public float pitchRange = 0;
 
-	public void Raise(Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
+	public float Raise(Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
 	{
+		float fxTime = 0;
+
 		if (sfx != null)
 		{
 			AudioInstance.PlayClipAtPoint(sfx, position, outputMixer, pitchRange);
+			fxTime = sfx.length;
 		}
 
 		foreach (GameObject visualFX in visualFX)
 		{
+
 			GameObject instance = FXPool.getFXObject(visualFX, poolSize);
 			instance.transform.position = position;
 			instance.transform.rotation = rotation;
@@ -53,8 +57,12 @@ public class FXSO : ScriptableObject
 			VisualFX vFX = instance.GetComponent<VisualFX>();
 			if (vFX != null)
 			{
+				if (fxTime < vFX.displayTime)
+					fxTime = vFX.displayTime;
+
 				vFX.Play();
 			}
 		}
+		return fxTime;
 	}
 }

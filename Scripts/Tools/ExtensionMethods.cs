@@ -42,10 +42,11 @@ public static class ExtensionMethods
 		return instance;
 	}
 
-	public static void RaiseFX(this FXSO fx, Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
+	public static float RaiseFX(this FXSO fx, Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
 	{
 		if (fx != null)
-			fx.Raise(position, rotation, parent, scale);
+			return fx.Raise(position, rotation, parent, scale);
+		return 0;
 	}
 
 	public static void Reset(this Transform transform)
