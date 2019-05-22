@@ -44,11 +44,6 @@ public class StateViewManager : FSM<StateViewManager.state>
 		get;
 		private set;
 	}
-	public bool menuCursorAvailable
-	{
-		get;
-		private set;
-	}
 
 	InputDeviceComponent idc;
 	UnityAction newStateView;
@@ -56,7 +51,6 @@ public class StateViewManager : FSM<StateViewManager.state>
 	void Start()
 	{
 		idc = FindObjectOfType<InputDeviceComponent>();
-		menuCursorAvailable = MenuCursor.instance != null;
 		if (initialyOpen == null)
 			initialyOpen = GetComponentInChildren<StateView>();
 		ShowStateView(initialyOpen);
