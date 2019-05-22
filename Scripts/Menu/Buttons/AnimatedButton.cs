@@ -97,7 +97,12 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 
 		if (isStateViewReady)
 		{
-			buttonAnimation.ChangeState(ButtonAnimation.state.Release);
+			if (stateView.svm.menuCursorAvailable)
+				buttonAnimation.ChangeState(ButtonAnimation.state.Release);
+			else
+			{
+				OnPointerClick(eventData);
+			}
 		}
 	}
 
