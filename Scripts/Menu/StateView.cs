@@ -137,9 +137,10 @@ public class StateView : FSM<StateView.state>
 	{
 		if (canvasGroup != null)
 		{
+			float startAlpha = canvasGroup.alpha;
 			yield return this.DoTween01(t =>
 			{
-				canvasGroup.alpha = Mathf.Lerp(1, 0, t);
+				canvasGroup.alpha = Mathf.Lerp(startAlpha, 0, t);
 			}, animationTime * 0.5f);
 			canvasGroup.interactable = false;
 		}
