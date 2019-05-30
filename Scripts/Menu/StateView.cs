@@ -120,10 +120,12 @@ public class StateView : FSM<StateView.state>
 		if (canvasGroup != null)
 		{
 			canvasGroup.interactable = true;
+			canvasGroup.blocksRaycasts = true;
 			yield return this.DoTween01(t =>
 			{
 				canvasGroup.alpha = Mathf.Lerp(0, 1, t);
 			}, animationTime);
+
 		}
 		yield break;
 	}
@@ -143,6 +145,7 @@ public class StateView : FSM<StateView.state>
 				canvasGroup.alpha = Mathf.Lerp(startAlpha, 0, t);
 			}, animationTime * 0.5f);
 			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
 		}
 		yield break;
 	}
