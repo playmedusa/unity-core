@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 public static class ExtensionMethods
 {
+	public static float GetRandom(this Vector2 minmax)
+	{
+		return Random.Range(minmax.x, minmax.y);
+	}
+
 	public static Vector3 ToViewportPointProjected(this Vector3 worldPos, Camera camera)
 	{
 		Vector3 camNormal = camera.transform.forward;
