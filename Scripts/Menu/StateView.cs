@@ -14,17 +14,25 @@ public class StateView : FSM<StateView.state>
 		stop
 	}
 
-	[Header("StateView config")]
+	[Header("Cached references")]
 	public RectTransform ui;
+	public StateViewManager svm;
 
+	[Header("StateView config")]
 	public bool skipAutoselect;
 	public bool showStatic;
 	public bool rememberPreviouslySelected;
 	public bool showMouse = true;
 	public bool showCursor;
 	public GameObject m_PreviouslySelected;
+
 	public float animationTime = 1;
-	public StateViewManager svm;
+	[SerializeField]
+	IOpenView iOpenView;
+	[SerializeField]
+	ICloseView iCloseView;
+	[SerializeField]
+	IExecuteView iExecuteView;
 
 	public bool isReady
 	{
@@ -49,19 +57,23 @@ public class StateView : FSM<StateView.state>
 	{
 		if (svm == null)
 			svm = GetComponentInParent<StateViewManager>();
+		if (ui == null)
+			ui = GetComponent<RectTransform>();
+		if (iOpenView == null)
+			iOpenView = GetComponentInChildren<IOpenView>();
+		if (iCloseView == null)
+			iCloseView = GetComponentInChildren<ICloseView>();
+		if (iExecuteView == null)
+			iExecuteView = GetComponentInChildren<IExecuteView>();
 	}
 	virtual protected void Awake()
 	{
-		if (ui == null)
-		{
-			ui = GetComponent<RectTransform>();
-		}
-
 		canvasGroup = ui.GetComponent<CanvasGroup>();
 		if (canvasGroup != null)
 		{
 			canvasGroup.alpha = 0;
 			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
 		}
 		ui.anchoredPosition = Vector2.zero;
 	}
@@ -83,10 +95,15 @@ public class StateView : FSM<StateView.state>
 	IEnumerator open()
 	{
 		transform.SetAsLastSibling();
+		canvasGroup.interactable = true;
+		canvasGroup.blocksRaycasts = true;
 		while (currentState == state.open)
 		{
 			currentState = state.execute;
-			yield return StartCoroutine(Open());
+			if (iOpenView != null)
+				yield return StartCoroutine(iOpenView.Open());
+			else
+				yield return StartCoroutine(Open());
 		}
 	}
 
@@ -95,16 +112,24 @@ public class StateView : FSM<StateView.state>
 		while (currentState == state.execute)
 		{
 			viewReady = true;
-			yield return StartCoroutine(Execute());
+			if (iExecuteView != null)
+				yield return StartCoroutine(iExecuteView.Execute());
+			else
+				yield return StartCoroutine(Execute());
 		}
 	}
 
 	IEnumerator close()
 	{
+		canvasGroup.interactable = false;
+		canvasGroup.blocksRaycasts = false;
 		while (currentState == state.close)
 		{
 			currentState = state.stop;
-			yield return StartCoroutine(Close());
+			if (iCloseView != null)
+				yield return StartCoroutine(iCloseView.Close());
+			else
+				yield return StartCoroutine(Close());
 		}
 	}
 
@@ -115,7 +140,7 @@ public class StateView : FSM<StateView.state>
 		yield break;
 	}
 
-	virtual protected IEnumerator Open()
+	public virtual IEnumerator Open()
 	{
 		if (canvasGroup != null)
 		{
@@ -130,12 +155,12 @@ public class StateView : FSM<StateView.state>
 		yield break;
 	}
 
-	virtual protected IEnumerator Execute()
+	protected virtual IEnumerator Execute()
 	{
 		yield break;
 	}
 
-	virtual protected IEnumerator Close()
+	public virtual IEnumerator Close()
 	{
 		if (canvasGroup != null)
 		{
