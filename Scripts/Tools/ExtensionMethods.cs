@@ -9,6 +9,12 @@ public static class ExtensionMethods
 		return Random.Range(minmax.x, minmax.y);
 	}
 
+	public static Color SetAlpha(this Color c, float alpha)
+	{
+		c.a = alpha;
+		return c;
+	}
+
 	public static Vector3 ToViewportPointProjected(this Vector3 worldPos, Camera camera)
 	{
 		Vector3 camNormal = camera.transform.forward;
