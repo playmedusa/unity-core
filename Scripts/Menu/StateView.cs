@@ -95,8 +95,11 @@ public class StateView : FSM<StateView.state>
 	IEnumerator open()
 	{
 		transform.SetAsLastSibling();
-		canvasGroup.interactable = true;
-		canvasGroup.blocksRaycasts = true;
+		if (canvasGroup != null)
+		{
+			canvasGroup.interactable = true;
+			canvasGroup.blocksRaycasts = true;
+		}
 		while (currentState == state.open)
 		{
 			currentState = state.execute;
@@ -121,8 +124,11 @@ public class StateView : FSM<StateView.state>
 
 	IEnumerator close()
 	{
-		canvasGroup.interactable = false;
-		canvasGroup.blocksRaycasts = false;
+		if (canvasGroup != null)
+		{
+			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
+		}
 		while (currentState == state.close)
 		{
 			currentState = state.stop;
