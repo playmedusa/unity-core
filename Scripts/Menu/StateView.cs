@@ -50,6 +50,9 @@ public class StateView : FSM<StateView.state>
 		}
 	}
 
+	public UnityAction onViewOpened;
+	public UnityAction onViewClosed;
+
 	protected CanvasGroup canvasGroup;
 	bool viewReady;
 
@@ -81,14 +84,14 @@ public class StateView : FSM<StateView.state>
 	public void Show(UnityAction callback = null)
 	{
 		viewReady = false;
-		this.callback = callback;
+		onViewOpened = callback;
 		ChangeState(state.open);
 	}
 
 	public void Hide(UnityAction callback = null)
 	{
 		viewReady = false;
-		this.callback = callback;
+		onViewClosed = callback;
 		ChangeState(state.close);
 	}
 
@@ -102,11 +105,16 @@ public class StateView : FSM<StateView.state>
 		}
 		while (currentState == state.open)
 		{
-			currentState = state.execute;
 			if (iOpenView != null)
 				yield return StartCoroutine(iOpenView.Open());
 			else
 				yield return StartCoroutine(Open());
+
+			if (currentState == state.open)
+			{
+				currentState = state.execute;
+				onViewOpened?.Invoke();
+			}
 		}
 	}
 
@@ -131,11 +139,16 @@ public class StateView : FSM<StateView.state>
 		}
 		while (currentState == state.close)
 		{
-			currentState = state.stop;
 			if (iCloseView != null)
 				yield return StartCoroutine(iCloseView.Close());
 			else
 				yield return StartCoroutine(Close());
+
+			if (currentState == state.close)
+			{
+				currentState = state.stop;
+				onViewClosed?.Invoke();
+			}
 		}
 	}
 

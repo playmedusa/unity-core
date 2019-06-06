@@ -23,8 +23,10 @@ public class FSM<T> : MonoBehaviour
 		{
 			yield return StartCoroutine(currentState.ToString());
 			if (callback != null)
+			{
 				callback.Invoke();
-			callback = null;
+				callback = null;
+			}
 		}
 	}
 
