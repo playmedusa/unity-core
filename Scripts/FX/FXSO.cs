@@ -35,7 +35,7 @@ public class FXSO : ScriptableObject
 	public AudioClip[] sfxList;
 	public float pitchRange = 0;
 
-	public float Raise(Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
+	public float Raise(Vector3 position, Quaternion rotation, Vector3 scale, Transform parent = null)
 	{
 		float fxTime = 0;
 
@@ -52,7 +52,7 @@ public class FXSO : ScriptableObject
 			instance.transform.position = position;
 			instance.transform.rotation = rotation;
 			instance.transform.SetParent(parent);
-			instance.transform.localScale = Vector3.one * scale;
+			instance.transform.localScale = scale;
 			instance.SetActive(true);
 			VisualFX vFX = instance.GetComponent<VisualFX>();
 			if (vFX != null)
@@ -64,5 +64,10 @@ public class FXSO : ScriptableObject
 			}
 		}
 		return fxTime;
+	}
+
+	public float Raise(Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
+	{
+		return Raise(position, rotation, Vector3.one * scale, parent);
 	}
 }
