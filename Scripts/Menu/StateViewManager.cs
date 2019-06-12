@@ -51,9 +51,8 @@ public class StateViewManager : FSM<StateViewManager.state>
 	void Start()
 	{
 		idc = FindObjectOfType<InputDeviceComponent>();
-		if (initialyOpen == null)
-			initialyOpen = GetComponentInChildren<StateView>();
-		ShowStateView(initialyOpen);
+		if (initialyOpen != null)
+			ShowStateView(initialyOpen);
 	}
 
 	void Update()
