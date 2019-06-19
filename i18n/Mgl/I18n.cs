@@ -132,7 +132,7 @@ namespace Mgl
 			}
 			else if (_isLoggingMissing)
 			{
-				Debug.Log("Missing translation for:" + key);
+				//Debug.Log("Missing translation for:" + key);
 			}
 			return translation;
 		}

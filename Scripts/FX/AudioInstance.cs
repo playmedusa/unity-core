@@ -15,7 +15,7 @@ public class AudioInstance : MonoBehaviour
 				_instance = FindObjectOfType<AudioInstance>();
 			if (_instance == null)
 			{
-				Debug.Log("AudioInstance not found, instantiating");
+				//Debug.Log("AudioInstance not found, instantiating");
 				GameObject go = new GameObject();
 				go.name = "AudioInstance";
 				_instance = go.AddComponent<AudioInstance>();

@@ -25,7 +25,6 @@ public class LocalizeImage : MonoBehaviour
 
 	void Start()
 	{
-		Debug.Log("Localize");
 		if (image != null)
 		{
 			LocalizeTheImage();
@@ -36,10 +35,8 @@ public class LocalizeImage : MonoBehaviour
 	{
 		for (int i = 0; i < localizations.Length; i++)
 		{
-			Debug.Log(localizations[i].ln + " " + I18n.GetLocale());
 			if (localizations[i].ln == I18n.GetLocale())
 			{
-				Debug.Log(localizations[i].ln + "  " + localizations[i].sprite);
 				image.sprite = localizations[i].sprite;
 			}
 		}
