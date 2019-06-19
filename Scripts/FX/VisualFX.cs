@@ -66,12 +66,13 @@ public class VisualFX : MonoBehaviour
 
 	IEnumerator AnimateIn()
 	{
+		Vector3 scale = transform.localScale;
 		switch (inAnimation)
 		{
 			case Animation.ElasticGrowOut:
 				yield return gameObject.DoTween01(t =>
 				{
-					transform.localScale = Vector3.one * PennerAnimation.ElasticEaseOut(t, 0, 1, 1);
+					transform.localScale = scale * PennerAnimation.ElasticEaseOut(t, 0, 1, 1);
 				}, inTime);
 				break;
 			default:
@@ -82,13 +83,13 @@ public class VisualFX : MonoBehaviour
 	IEnumerator AnimateOut()
 	{
 		yield return new WaitForSeconds(displayTime);
-
+		Vector3 scale = transform.localScale;
 		switch (outAnimation)
 		{
 			case Animation.ElasticGrowOut:
 				yield return gameObject.DoTween01(t =>
 				{
-					transform.localScale = Vector3.one * PennerAnimation.ElasticEaseOut(t, 1, -1, 1);
+					transform.localScale = scale * PennerAnimation.ElasticEaseOut(t, 1, -1, 1);
 				}, outTime);
 				break;
 			default:

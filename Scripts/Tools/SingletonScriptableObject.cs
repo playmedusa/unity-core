@@ -18,7 +18,16 @@ public abstract class SingletonScriptableObject<T> : ScriptableObject where T : 
 			if (!_instance)
 				_instance = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
 			if (!_instance)
-				_instance = Resources.Load<T>("SingletonScriptables/");
+			{
+				var assets = Resources.LoadAll<T>("SingletonScriptables/");
+				if (assets.Length > 0)
+					_instance = assets[0];
+				else
+				{
+					Debug.LogError("Singleton missingin resources folder");
+					CreateInstance<T>();
+				}
+			}
 			return _instance;
 		}
 	}
