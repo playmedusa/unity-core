@@ -1,11 +1,55 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mgl;
+using TMPro;
 
 public class Localize : MonoBehaviour
 {
+
+	[Serializable]
+	public class TextWrapper
+	{
+		[SerializeField]
+		Text uiText;
+		[SerializeField]
+		TextMeshPro tmpText;
+		[SerializeField]
+		TextMeshProUGUI tmpUiText;
+
+		public TextWrapper(GameObject holder)
+		{
+			uiText = holder.GetComponent<Text>();
+			tmpText = holder.GetComponent<TextMeshPro>();
+			tmpUiText = holder.GetComponent<TextMeshProUGUI>();
+		}
+
+		public string text
+		{
+			get
+			{
+				if (uiText != null)
+					return uiText.text;
+				if (tmpText != null)
+					return tmpText.text;
+				if (tmpUiText != null)
+					return tmpUiText.text;
+				return "";
+			}
+			set
+			{
+				if (uiText != null)
+					uiText.text = value;
+				if (tmpText != null)
+					tmpText.text = value;
+				if (tmpUiText != null)
+					tmpUiText.text = value;
+			}
+		}
+
+	}
+
 	public string label;
 	public bool upperCase;
 
@@ -13,14 +57,14 @@ public class Localize : MonoBehaviour
 	public Vector2[] sizeFix;
 
 	[SerializeField]
-	Text textLabel;
+	TextWrapper textLabel;
 
 	[SerializeField]
 	RectTransform rt;
 
 	void OnValidate()
 	{
-		textLabel = GetComponent<Text>();
+		textLabel = new TextWrapper(gameObject);
 		rt = GetComponent<RectTransform>();
 	}
 
