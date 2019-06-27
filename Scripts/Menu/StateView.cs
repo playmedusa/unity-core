@@ -27,11 +27,11 @@ public class StateView : FSM<StateView.state>
 	public GameObject m_PreviouslySelected;
 
 	public float animationTime = 1;
-	[SerializeField]
+	//TODO [SerializeReference]
 	IOpenView iOpenView;
-	[SerializeField]
+	//TODO [SerializeReference]
 	ICloseView iCloseView;
-	[SerializeField]
+	//TODO [SerializeReference]
 	IExecuteView iExecuteView;
 
 	public bool isReady
@@ -62,15 +62,15 @@ public class StateView : FSM<StateView.state>
 			svm = GetComponentInParent<StateViewManager>();
 		if (ui == null)
 			ui = GetComponent<RectTransform>();
+	}
+	virtual protected void Awake()
+	{
 		if (iOpenView == null)
 			iOpenView = GetComponentInChildren<IOpenView>();
 		if (iCloseView == null)
 			iCloseView = GetComponentInChildren<ICloseView>();
 		if (iExecuteView == null)
 			iExecuteView = GetComponentInChildren<IExecuteView>();
-	}
-	virtual protected void Awake()
-	{
 		canvasGroup = ui.GetComponent<CanvasGroup>();
 		if (canvasGroup != null)
 		{
