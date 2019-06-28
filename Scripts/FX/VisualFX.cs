@@ -23,7 +23,7 @@ public class VisualFX : MonoBehaviour
 	public ParticleSystem ps;
 	public Sprite sprite;
 	public Renderer shaderRenderer;
-	public Animation animation;
+	new public Animation animation;
 
 	[Header("FX Settings")]
 	public FXType fxType;
