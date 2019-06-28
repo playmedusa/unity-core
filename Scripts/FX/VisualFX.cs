@@ -15,6 +15,7 @@ public class VisualFX : MonoBehaviour
 		Particles,
 		Shader,
 		Sprite,
+		Animation,
 		Static
 	}
 
@@ -22,6 +23,7 @@ public class VisualFX : MonoBehaviour
 	public ParticleSystem ps;
 	public Sprite sprite;
 	public Renderer shaderRenderer;
+	public Animation animation;
 
 	[Header("FX Settings")]
 	public FXType fxType;
@@ -57,6 +59,10 @@ public class VisualFX : MonoBehaviour
 
 			case FXType.Sprite:
 				PlaySpriteFX();
+				break;
+
+			case FXType.Animation:
+				PlayAnimation();
 				break;
 		}
 
@@ -122,6 +128,14 @@ public class VisualFX : MonoBehaviour
 		if (sprite != null)
 		{
 
+		}
+	}
+
+	void PlayAnimation()
+	{
+		if (animation != null)
+		{
+			//animation.Play();
 		}
 	}
 
