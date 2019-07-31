@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IPointerEnterHandler
+public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IPointerEnterHandler, IDeselectHandler
 {
 	public UnityEvent OnClick;
 	ButtonAnimation buttonAnimation;
@@ -34,6 +34,8 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 				animationState != ButtonAnimation.state.Click;
 		}
 	}
+
+	float deselectTime;
 
 	protected override void Awake()
 	{
@@ -79,41 +81,6 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 			buttonAnimation.ChangeState(ButtonAnimation.state.Disabled);
 	}
 
-	override public void OnPointerDown(PointerEventData eventData)
-	{
-		base.OnPointerDown(eventData);
-		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
-			return;
-
-		if (isStateViewReady)
-			buttonAnimation.ChangeState(ButtonAnimation.state.Press);
-	}
-
-	override public void OnPointerUp(PointerEventData eventData)
-	{
-		base.OnPointerUp(eventData);
-		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
-			return;
-
-		if (isStateViewReady)
-		{
-			buttonAnimation.ChangeState(ButtonAnimation.state.Release);
-		}
-	}
-
-	virtual public void OnPointerClick(PointerEventData eventData)
-	{
-		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
-			return;
-
-		if (isStateViewReady)
-		{
-			buttonAnimation.ChangeState(ButtonAnimation.state.Click);
-			if (StateViewManager.instance.isUsingMouse)
-				MenuCursor.instance?.PlaySelectSound();
-		}
-	}
-
 	public override void OnPointerEnter(PointerEventData eventData)
 	{
 		base.OnPointerEnter(eventData);
@@ -129,16 +96,66 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 		}
 	}
 
+	override public void OnPointerDown(PointerEventData eventData)
+	{
+		base.OnPointerDown(eventData);
+		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+			return;
+
+		if (isStateViewReady)
+			buttonAnimation.ChangeState(ButtonAnimation.state.Press);
+	}
+
+	virtual public void OnPointerClick(PointerEventData eventData)
+	{
+		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+			return;
+
+		if (isStateViewReady)
+		{
+			buttonAnimation.ChangeState(ButtonAnimation.state.Click);
+			if (StateViewManager.instance.isUsingMouse)
+				MenuCursor.instance?.PlaySelectSound();
+		}
+	}
+
 	public override void OnPointerExit(PointerEventData eventData)
 	{
 		if (buttonAnimation.currentState == ButtonAnimation.state.Click)
 			return;
+
 		base.OnPointerExit(eventData);
+		print("Exit " + Time.time);
 		if (isStateViewReady)
 		{
 			Deselect();
 			if (stateView != null)
 				stateView.m_PreviouslySelected = null;
+		}
+	}
+
+	override public void OnDeselect(BaseEventData eventData)
+	{
+		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+			return;
+		base.OnDeselect(eventData);
+		print("Deselect " + Time.time);
+		deselectTime = Time.time;
+	}
+
+	override public void OnPointerUp(PointerEventData eventData)
+	{
+		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+			return;
+
+		base.OnPointerUp(eventData);
+		print("Up " + (Time.time - deselectTime));
+		if (isStateViewReady)
+		{
+			if (Time.time - deselectTime < 0.1f || EventSystem.current.currentSelectedGameObject == gameObject)
+				buttonAnimation.ChangeState(ButtonAnimation.state.Click);
+			else
+				buttonAnimation.ChangeState(ButtonAnimation.state.Release);
 		}
 	}
 

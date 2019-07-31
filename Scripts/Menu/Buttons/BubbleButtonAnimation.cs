@@ -102,10 +102,7 @@ public class BubbleButtonAnimation : ButtonAnimation
 		}
 		transform.localScale = pivotScale * targetScale;
 
-		if (EventSystem.current.currentSelectedGameObject == gameObject)
-			ChangeState(state.Select);
-		else
-			ChangeState(state.Idle);
+		ChangeState(state.Idle);
 	}
 
 }
