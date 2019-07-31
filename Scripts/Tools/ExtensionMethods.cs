@@ -9,6 +9,11 @@ public static class ExtensionMethods
 		return Random.Range(minmax.x, minmax.y);
 	}
 
+	public static int GetRandomInt(this Vector2 minmax)
+	{
+		return Mathf.RoundToInt(Random.Range(minmax.x, minmax.y));
+	}
+
 	public static Color SetAlpha(this Color c, float alpha)
 	{
 		c.a = alpha;

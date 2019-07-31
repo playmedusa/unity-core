@@ -69,8 +69,21 @@ public static class CollectionsExtensionMethods
 		return (array[rng.Next(0, array.Length)]);
 	}
 
+	public static int RouletteWheel<T>(this List<T> slotsList, System.Func<T, float> p)
+	{
+		if (slotsList.Count == 0) return -1;
+		if (slotsList.Count == 1) return 0;
+
+		float[] slots = new float[slotsList.Count];
+		for (int i = 0; i < slotsList.Count; i++)
+			slots[i] = p(slotsList[i]);
+		return slots.RouletteWheel();
+	}
+
 	public static int RouletteWheel(this float[] slots)
 	{
+		if (slots.Length == 0) return -1;
+
 		int slotsCount = slots.Length;
 		float sum = 0;
 
