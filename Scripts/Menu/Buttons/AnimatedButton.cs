@@ -125,7 +125,6 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 			return;
 
 		base.OnPointerExit(eventData);
-		print("Exit " + Time.time);
 		if (isStateViewReady)
 		{
 			Deselect();
@@ -139,7 +138,6 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
 			return;
 		base.OnDeselect(eventData);
-		print("Deselect " + Time.time);
 		deselectTime = Time.time;
 	}
 
@@ -149,7 +147,6 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 			return;
 
 		base.OnPointerUp(eventData);
-		print("Up " + (Time.time - deselectTime));
 		if (isStateViewReady)
 		{
 			if (Time.time - deselectTime < 0.1f || EventSystem.current.currentSelectedGameObject == gameObject)
