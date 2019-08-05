@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Mgl;
 using TMPro;
 
@@ -51,8 +50,8 @@ public class OverlayPopup : MonoBehaviour
 	public TextMeshProUGUI messageTitle;
 	public TextMeshProUGUI messageBody;
 
-	public float screenOffset = 325;
-	public float rotateSpeed = 250;
+	float screenOffset = 900;
+	float rotateSpeed = 50;
 
 
 	void Awake()
@@ -103,7 +102,6 @@ public class OverlayPopup : MonoBehaviour
 
 	public void CloseMessage()
 	{
-		Debug.Log("Click");
 		fsm.ChangeState(states.closed);
 	}
 
@@ -170,10 +168,12 @@ public class OverlayPopup : MonoBehaviour
 			);
 		}, 0.75f);
 
-		Debug.Log("Showing message");
+		background.interactable = true;
+		background.blocksRaycasts = true;
+
 		while (fsm.currentState == states.showMessage)
 			yield return 0;
-		Debug.Log("Message closed");
+
 		this.DoTween01(t =>
 		{
 			//messagePopup.localScale = Vector3.one * PennerAnimation.QuadEaseInOut(t, 1, -1, 1);
