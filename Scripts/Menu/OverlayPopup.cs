@@ -50,8 +50,8 @@ public class OverlayPopup : MonoBehaviour
 	public TextMeshProUGUI messageTitle;
 	public TextMeshProUGUI messageBody;
 
-	float screenOffset = 900;
-	float rotateSpeed = 50;
+	public float screenOffset = 900;
+	public float rotateSpeed = 50;
 
 
 	void Awake()
