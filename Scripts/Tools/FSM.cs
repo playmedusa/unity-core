@@ -42,7 +42,8 @@ public class FSM<T> : MonoBehaviour
 
 	protected void StopFSM()
 	{
-		StopCoroutine(fsm);
+		if (fsm != null)
+			StopCoroutine(fsm);
 		fsm = null;
 	}
 }
