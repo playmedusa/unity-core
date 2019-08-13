@@ -33,10 +33,18 @@ public abstract class ButtonAnimation : FSM<ButtonAnimation.state>, IAnimatedBut
 		yield break;
 	}
 
-
 	void Awake()
 	{
 		rectTransform = GetComponent<RectTransform>();
+	}
+
+	void OnDisable()
+	{
+		if (fsm != null)
+		{
+			StopCoroutine(FSMLoop());
+			fsm = null;
+		}
 	}
 
 	public void SetOwner(AnimatedButton owner)

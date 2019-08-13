@@ -1,41 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioInstance : MonoBehaviour
+public partial class AudioInstance : Singleton<AudioInstance>
 {
-
-	private static AudioInstance _instance;
-	public static AudioInstance instance
-	{
-		get
-		{
-			if (_instance == null)
-				_instance = FindObjectOfType<AudioInstance>();
-			if (_instance == null)
-			{
-				//Debug.Log("AudioInstance not found, instantiating");
-				GameObject go = new GameObject();
-				go.name = "AudioInstance";
-				_instance = go.AddComponent<AudioInstance>();
-			}
-			return _instance;
-		}
-	}
-
 	public AudioSource aSource;
-
 	protected Dictionary<string, float> playerClipAtPointStamp;
 
-	void Awake()
+	static float volume = 1;
+	static partial void UpdateVolume();
+
+	override protected void Init()
 	{
 		playerClipAtPointStamp = new Dictionary<string, float>();
+		aSource = gameObject.AddComponent<AudioSource>();
 	}
 
 	static public void PlayOneShot(AudioClip clip, Vector3 position)
 	{
-		instance.aSource.PlayOneShot(clip);
+		instance.aSource.PlayOneShot(clip, volume);
 	}
 
 	static public AudioSource PlayClipAtPoint(AudioClip clip, Vector3 pos)
@@ -54,6 +37,9 @@ public class AudioInstance : MonoBehaviour
 		tempGO.name = "TempAudio";
 		tempGO.transform.position = pos;
 		AudioSource aSource = tempGO.AddComponent<AudioSource>();
+
+		UpdateVolume();
+		aSource.volume = volume;
 		aSource.clip = clip;
 		aSource.pitch = Random.Range(1f - pitchRange, 1f + pitchRange);
 		aSource.spatialBlend = 0;
