@@ -150,7 +150,10 @@ public class AnimatedButton : Selectable, IPointerDownHandler, IPointerUpHandler
 		if (isStateViewReady)
 		{
 			if (Time.time - deselectTime < 0.1f || EventSystem.current.currentSelectedGameObject == gameObject)
+			{
 				buttonAnimation.ChangeState(ButtonAnimation.state.Click);
+				MenuCursor.instance?.PlaySelectSound();
+			}
 			else
 				buttonAnimation.ChangeState(ButtonAnimation.state.Release);
 		}
