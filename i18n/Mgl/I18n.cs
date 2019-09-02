@@ -5,9 +5,8 @@ using System.Linq;
 
 namespace Mgl
 {
-	public class I18n
+	public class I18n : Singleton<I18n>
 	{
-		static I18n instance = new I18n();
 		private JSONNode translationData = null;
 
 		protected string[] locales = new string[] { "en-US", "fr-FR", "es-ES" };
@@ -21,22 +20,36 @@ namespace Mgl
 		private string _localePath = "Locales/";
 		private bool _isLoggingMissing = true;
 
-		static I18n()
+		override protected void Init()
 		{
-
+			InitCurrentLocale();
+			SetLocale(_currentLocale);
+			DontDestroyOnLoad(instance.gameObject);
 		}
 
-		public static I18n Instance
+		void InitCurrentLocale()
 		{
-			get
+			if (PlayerPrefs.HasKey("Language"))
 			{
-				return instance;
+				_currentLocale = PlayerPrefs.GetString("Language");
+				return;
 			}
-		}
 
-		public static void Reset(I18n newInstance)
-		{
-			instance = newInstance;
+			switch (Application.systemLanguage)
+			{
+				case SystemLanguage.Catalan: _currentLocale = "es-ES"; break;
+				case SystemLanguage.Spanish: _currentLocale = "es-ES"; break;
+				case SystemLanguage.English: _currentLocale = "en-US"; break;
+				case SystemLanguage.French: _currentLocale = "fr-FR"; break;
+				case SystemLanguage.German: _currentLocale = "de-DE"; break;
+				case SystemLanguage.Italian: _currentLocale = "it-IT"; break;
+				case SystemLanguage.Japanese: _currentLocale = "jp-JP"; break;
+				case SystemLanguage.ChineseSimplified: _currentLocale = "zh-CN"; break;
+				case SystemLanguage.ChineseTraditional: _currentLocale = "zh-CN"; break;
+				case SystemLanguage.Unknown: _currentLocale = "en-ES"; break;
+			}
+
+			PlayerPrefs.SetString("Language", _currentLocale);
 		}
 
 		void InitConfig()
