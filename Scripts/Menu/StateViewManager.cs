@@ -2,12 +2,13 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using InputMapper;
 
 public class StateViewManager : FSM<StateViewManager.state>
 {
+	public static event Action<DeviceOrientation> OnOrientationChange;
 
 	public enum state
 	{
@@ -25,6 +26,8 @@ public class StateViewManager : FSM<StateViewManager.state>
 			return _instance;
 		}
 	}
+	static DeviceOrientation orientation;
+	public bool checkDeviceOrientation;
 
 	[Header("Basic views")]
 	public StateView initialyOpen;
@@ -81,6 +84,27 @@ public class StateViewManager : FSM<StateViewManager.state>
 		else
 		{
 			Cursor.visible = false;
+		}
+
+		if (checkDeviceOrientation)
+			CheckDeviceOrientation();
+	}
+
+	void CheckDeviceOrientation()
+	{
+		switch (Input.deviceOrientation)
+		{
+			case DeviceOrientation.Unknown:
+			case DeviceOrientation.FaceUp:
+			case DeviceOrientation.FaceDown:
+				break;
+			default:
+				if (orientation != Input.deviceOrientation)
+				{
+					orientation = Input.deviceOrientation;
+					if (OnOrientationChange != null) OnOrientationChange(orientation);
+				}
+				break;
 		}
 	}
 

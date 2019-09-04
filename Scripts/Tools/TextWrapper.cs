@@ -43,4 +43,23 @@ public class TextWrapper
 		}
 	}
 
+	public TMP_FontAsset TMP_Font
+	{
+		get
+		{
+			if (tmpText != null)
+				return tmpText.font;
+			if (tmpUiText != null)
+				return tmpUiText.font;
+			return null;
+		}
+		set
+		{
+			if (tmpText != null)
+				tmpText.font = value;
+			if (tmpUiText != null)
+				tmpUiText.font = value;
+		}
+	}
+
 }

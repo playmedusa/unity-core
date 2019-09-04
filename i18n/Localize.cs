@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using Mgl;
 
-public class Localize : MonoBehaviour
+public partial class Localize : MonoBehaviour
 {
+	[Header("Localize variables")]
 	public string label;
 	public bool upperCase;
 
 	public Vector3[] positionFix;
 	public Vector2[] sizeFix;
 
+	[Header("Serialized fields")]
 	[SerializeField]
 	TextWrapper textLabel;
 
@@ -19,18 +21,23 @@ public class Localize : MonoBehaviour
 	{
 		textLabel = new TextWrapper(gameObject);
 		rt = GetComponent<RectTransform>();
+		PartialValidate();
 	}
+	partial void PartialValidate();
+	partial void ProcessFonts();
 
 	void Awake()
 	{
 		if (textLabel != null)
 		{
+			ProcessFonts();
 			LocalizeTextLabel();
 		}
 	}
 
 	void LocalizeTextLabel()
 	{
+		ProcessFonts();
 		if (label.Length > 0)
 		{
 			textLabel.text = upperCase ? I18n.T(label) : I18n.t(label);

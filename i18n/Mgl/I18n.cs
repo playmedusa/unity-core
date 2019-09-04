@@ -9,7 +9,7 @@ namespace Mgl
 	{
 		private JSONNode translationData = null;
 
-		protected string[] locales = new string[] { "en-US", "fr-FR", "es-ES" };
+		protected string[] locales = new string[] { "en-US", "fr-FR", "es-ES", "de-DE", "it-IT", "jp-JP", "zh-CN" };
 		public static int localeId
 		{
 			get;
