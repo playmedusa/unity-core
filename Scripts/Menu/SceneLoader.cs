@@ -26,6 +26,7 @@ public class SceneLoader : MonoBehaviour
 	CanvasGroup fadeCanvasGroup;
 	public AudioSource music;
 	public float timeOut;
+	public float fadeInDelay;
 	public UnityEvent onTimeOut;
 
 	void Awake()
@@ -54,10 +55,11 @@ public class SceneLoader : MonoBehaviour
 	IEnumerator FadeIn(float animationTime = 0.5f)
 	{
 		fadeCanvasGroup.alpha = 1.0f;
+		yield return new WaitForSeconds(fadeInDelay);
 		float elapsedTime = 0;
 		while (elapsedTime < animationTime)
 		{
-			fadeCanvasGroup.alpha = PennerAnimation.SineEaseOut(elapsedTime / animationTime, 1, -1, 1);
+			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(elapsedTime / animationTime, 1, -1, 1);
 			elapsedTime += Time.deltaTime;
 			yield return 0;
 		}
@@ -72,7 +74,7 @@ public class SceneLoader : MonoBehaviour
 		{
 			if (music != null)
 				music.volume = PennerAnimation.CubicEaseOut(elapsedTime / animationTime, 0, 1, 1);
-			fadeCanvasGroup.alpha = PennerAnimation.SineEaseOut(elapsedTime / animationTime, 0, 1, 1);
+			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(elapsedTime / animationTime, 0, 1, 1);
 			elapsedTime += Time.deltaTime;
 			yield return 0;
 		}
