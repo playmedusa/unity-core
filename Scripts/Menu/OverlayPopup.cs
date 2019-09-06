@@ -39,6 +39,7 @@ public class OverlayPopup : MonoBehaviour
 
 	Action callback;
 
+	public RectTransform canvasRT;
 	public CanvasGroup background;
 
 	[Header("Loading popup")]
@@ -58,8 +59,15 @@ public class OverlayPopup : MonoBehaviour
 	Action yesCallback = null;
 	Action noCallback = null;
 
+	public float screenOffset
+	{
+		get
+		{
+			return canvasRT.sizeDelta.y;
+		}
+	}
+
 	[Header("General settings")]
-	public float screenOffset = 900;
 	public float rotateSpeed = 50;
 
 
@@ -151,6 +159,10 @@ public class OverlayPopup : MonoBehaviour
 
 	IEnumerator showView(RectTransform holder, states state)
 	{
+		loadingPopup.anchoredPosition = Vector3.down * screenOffset;
+		messagePopup.anchoredPosition = Vector3.down * screenOffset;
+		choosePopup.anchoredPosition = Vector3.down * screenOffset;
+
 		yield return this.DoTween01(t =>
 		{
 			//loadingPopup.localScale = Vector3.one * PennerAnimation.QuadEaseInOut(t, 0, 1, 1);

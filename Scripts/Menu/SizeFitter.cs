@@ -35,66 +35,57 @@ public class SizeFitter : MonoBehaviour
 		}
 	}
 
-	void OnEnable()
-	{
-		StateViewManager.OnOrientationChange += OnOrientationChange;
-	}
-
-	void OnDisable()
-	{
-		StateViewManager.OnOrientationChange -= OnOrientationChange;
-	}
-
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
-			OnOrientationChange(DeviceOrientation.Portrait);
+			OnDimensionsChange();
 	}
 
-	void OnOrientationChange(DeviceOrientation newOrientation)
+	void OnRectTransformDimensionsChange()
 	{
-		float match = 0;
-		float xScaleFactor = ((float)Screen.width / 1920f) * (1f - match);
-		float yScaleFactor = ((float)Screen.height / 1080f) * match;
+		OnDimensionsChange();
+	}
+
+	void OnDimensionsChange()
+	{
+		var rt = canvas.GetComponent<RectTransform>();
 
 		float refAspect = 16f / 9f;
 		float screenAspect = (float)Screen.width / (float)Screen.height;
-		float scaleFactor = (aspect * screenAspect) / refAspect;
+		float scaleFactor = screenAspect / refAspect;
 
 		float minWidth = 0;
 		float minHeight = 0;
+		float unscaledScreenWidth = Screen.width / canvas.scaleFactor;
+		float unscaledScreenHeight = Screen.height * canvas.scaleFactor;
 
-		if (screenAspect / refAspect < 1) //Narrower
-		{
-			float unscaledScreenWidth = Screen.width / canvas.scaleFactor;
-			minWidth = unscaledScreenWidth < maxWidth + minXPadding ? unscaledScreenWidth - minXPadding : maxWidth;
-			if (minWidth < 0) minWidth = 0;
-		}
-		else //Wider
-		{
-			float unscaledScreenHeight = Screen.height / canvas.scaleFactor;
-			minHeight = unscaledScreenHeight < maxHeight + minYPadding ? unscaledScreenHeight - minXPadding : maxWidth;
-			if (minHeight < 0) minHeight = 0;
-		}
+		unscaledScreenWidth = rt.sizeDelta.x;
+		unscaledScreenHeight = rt.sizeDelta.y;
 
-		float width = Mathf.Clamp(maxHeight * scaleFactor, minWidth, maxWidth);
-		float height = Mathf.Clamp(maxWidth / scaleFactor, minHeight, maxHeight);
+		minWidth = unscaledScreenWidth < maxWidth + minXPadding ? unscaledScreenWidth - minXPadding : maxWidth;
+		if (minWidth < 0) minWidth = 0;
+
+		minHeight = unscaledScreenHeight < maxHeight + minYPadding ? unscaledScreenHeight - minYPadding : maxHeight;
+		if (minHeight < 0) minHeight = 0;
+
+
+		float width = Mathf.Clamp(unscaledScreenWidth * scaleFactor, minWidth, maxWidth);
+		float height = Mathf.Clamp(unscaledScreenHeight * scaleFactor, minHeight, maxHeight);
 
 		if (width <= maxWidth)
 		{
 			rectTransform.sizeDelta = new Vector2(
 				width,
-				preserveAspect ? maxHeight * (width / maxWidth) : height
+				preserveAspect ? width / aspect : height
 			);
 		}
 		else
 		{
 			rectTransform.sizeDelta = new Vector2(
-				preserveAspect ? maxWidth * (height / maxHeight) : width,
+				preserveAspect ? height / aspect : width,
 				height
 			);
 		}
-
 	}
 
 }

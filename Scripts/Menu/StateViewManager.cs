@@ -8,7 +8,7 @@ using InputMapper;
 
 public class StateViewManager : FSM<StateViewManager.state>
 {
-	public static event Action<DeviceOrientation> OnOrientationChange;
+	public static event Action<ScreenOrientation> OnOrientationChange;
 
 	public enum state
 	{
@@ -26,8 +26,6 @@ public class StateViewManager : FSM<StateViewManager.state>
 			return _instance;
 		}
 	}
-	static DeviceOrientation orientation;
-	public bool checkDeviceOrientation;
 
 	[Header("Basic views")]
 	public StateView initialyOpen;
@@ -50,6 +48,24 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 	InputDeviceComponent idc;
 	UnityAction newStateView;
+
+	void OnRectTransformDimensionsChange()
+	{
+#if UNITY_EDITOR
+		Screen.orientation = ScreenOrientation.Landscape;
+#endif
+		switch (Screen.orientation)
+		{
+			case ScreenOrientation.LandscapeLeft:
+			case ScreenOrientation.LandscapeRight:
+				OnOrientationChange?.Invoke(ScreenOrientation.Landscape);
+				break;
+			case ScreenOrientation.Portrait:
+			case ScreenOrientation.PortraitUpsideDown:
+				OnOrientationChange?.Invoke(ScreenOrientation.Portrait);
+				break;
+		}
+	}
 
 	void Start()
 	{
@@ -84,27 +100,6 @@ public class StateViewManager : FSM<StateViewManager.state>
 		else
 		{
 			Cursor.visible = false;
-		}
-
-		if (checkDeviceOrientation)
-			CheckDeviceOrientation();
-	}
-
-	void CheckDeviceOrientation()
-	{
-		switch (Input.deviceOrientation)
-		{
-			case DeviceOrientation.Unknown:
-			case DeviceOrientation.FaceUp:
-			case DeviceOrientation.FaceDown:
-				break;
-			default:
-				if (orientation != Input.deviceOrientation)
-				{
-					orientation = Input.deviceOrientation;
-					if (OnOrientationChange != null) OnOrientationChange(orientation);
-				}
-				break;
 		}
 	}
 
