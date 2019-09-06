@@ -10,7 +10,8 @@ public class SizeFitter : MonoBehaviour
 	RectTransform rectTransform;
 	[HideInInspector]
 	[SerializeField]
-	Canvas canvas;
+	RectTransform canvasRectTransform;
+
 
 	public bool preserveAspect;
 	public float aspect;
@@ -22,10 +23,8 @@ public class SizeFitter : MonoBehaviour
 
 	void OnValidate()
 	{
-		if (rectTransform == null)
-			rectTransform = GetComponent<RectTransform>();
-		if (canvas == null)
-			canvas = GetComponentInParent<Canvas>();
+		rectTransform = GetComponent<RectTransform>();
+		canvasRectTransform = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
 
 		if (preserveAspect && aspect <= 0)
 		{
@@ -48,19 +47,15 @@ public class SizeFitter : MonoBehaviour
 
 	void OnDimensionsChange()
 	{
-		var rt = canvas.GetComponent<RectTransform>();
-
-		float refAspect = 16f / 9f;
-		float screenAspect = (float)Screen.width / (float)Screen.height;
-		float scaleFactor = screenAspect / refAspect;
 
 		float minWidth = 0;
 		float minHeight = 0;
-		float unscaledScreenWidth = Screen.width / canvas.scaleFactor;
-		float unscaledScreenHeight = Screen.height * canvas.scaleFactor;
+		float unscaledScreenWidth = canvasRectTransform.sizeDelta.x;
+		float unscaledScreenHeight = canvasRectTransform.sizeDelta.y;
 
-		unscaledScreenWidth = rt.sizeDelta.x;
-		unscaledScreenHeight = rt.sizeDelta.y;
+		float refAspect = 16f / 9f;
+		float screenAspect = unscaledScreenWidth / unscaledScreenHeight;
+		float scaleFactor = screenAspect / refAspect;
 
 		minWidth = unscaledScreenWidth < maxWidth + minXPadding ? unscaledScreenWidth - minXPadding : maxWidth;
 		if (minWidth < 0) minWidth = 0;
