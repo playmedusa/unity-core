@@ -62,4 +62,27 @@ public class TextWrapper
 		}
 	}
 
+	public Color color
+	{
+		get
+		{
+			if (uiText != null)
+				return uiText.color;
+			if (tmpText != null)
+				return tmpText.color;
+			if (tmpUiText != null)
+				return tmpUiText.color;
+			return Color.clear;
+		}
+		set
+		{
+			if (uiText != null)
+				uiText.color = value;
+			if (tmpText != null)
+				tmpText.color = value;
+			if (tmpUiText != null)
+				tmpUiText.color = value;
+		}
+	}
+
 }

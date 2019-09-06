@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ObjectPool
@@ -20,11 +19,11 @@ public class ObjectPool
 		pooledObjects = new List<GameObject>();
 		for (int i = 0; i < pooledAmount; i++)
 		{
-			AddPrefab();
+			AddInstance();
 		}
 	}
 
-	void AddPrefab()
+	void AddInstance()
 	{
 		GameObject obj = (GameObject)MonoBehaviour.Instantiate(prefab, parent);
 		obj.SetActive(false);
