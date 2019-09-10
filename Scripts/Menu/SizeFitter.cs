@@ -47,6 +47,7 @@ public class SizeFitter : MonoBehaviour
 
 	void OnDimensionsChange()
 	{
+		if (canvasRectTransform == null) return;
 
 		float minWidth = 0;
 		float minHeight = 0;

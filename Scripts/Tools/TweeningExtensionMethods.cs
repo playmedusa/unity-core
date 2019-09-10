@@ -42,6 +42,31 @@ public static class TweeningExtensionMethods
 		return obj.StartCoroutine(tween);
 	}
 
+	public static IEnumerator UnscaledTween01(this UnityEngine.Object obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	{
+		float elapsedTime = 0;
+		while (elapsedTime < animationTime)
+		{
+			step(elapsedTime / animationTime);
+			elapsedTime += Time.unscaledDeltaTime;
+			yield return 0;
+		}
+		step(1);
+		if (callback != null)
+			callback();
+	}
+
+	public static Coroutine DoUnscaledTween01(this UnityEngine.Component c, System.Action<float> step, float animationTime, System.Action callback = null)
+	{
+		return c.gameObject.DoUnscaledTween01(step, animationTime, callback);
+	}
+
+	public static Coroutine DoUnscaledTween01(this UnityEngine.GameObject obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	{
+		IEnumerator tween = obj.UnscaledTween01(step, animationTime, callback);
+		return obj.StartCoroutine(tween);
+	}
+
 	public static float CatmullLerp(this float[] values, float t)
 	{
 		float timePerSegment = 1.0f / (values.Length - 1);

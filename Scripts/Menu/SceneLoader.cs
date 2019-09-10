@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 using System.Collections;
 using UnityEngine.Events;
 
@@ -47,6 +48,11 @@ public class SceneLoader : MonoBehaviour
 		StartCoroutine(FadeOutAndLoad(sceneName, 0.5f, 0));
 	}
 
+	public void Load(string sceneName, Action callback)
+	{
+		StartCoroutine(FadeOutAndLoad(sceneName, 0.5f, 0, callback));
+	}
+
 	public void Load(string sceneName, float animationTime = 0.5f, float waitTime = 0f)
 	{
 		StartCoroutine(FadeOutAndLoad(sceneName, animationTime, waitTime));
@@ -56,33 +62,32 @@ public class SceneLoader : MonoBehaviour
 	{
 		fadeCanvasGroup.alpha = 1.0f;
 		yield return new WaitForSeconds(fadeInDelay);
-		float elapsedTime = 0;
-		while (elapsedTime < animationTime)
+
+		yield return this.DoUnscaledTween01(t =>
 		{
-			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(elapsedTime / animationTime, 1, -1, 1);
-			elapsedTime += Time.deltaTime;
-			yield return 0;
-		}
-		fadeCanvasGroup.alpha = 0;
+			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(t, 1, -1, 1);
+		}, animationTime);
 	}
 
-	IEnumerator FadeOutAndLoad(string sceneName, float animationTime, float waitTime)
+	IEnumerator FadeOutAndLoad(string sceneName, float animationTime, float waitTime, Action callback = null)
 	{
 		fadeCanvasGroup.alpha = 0;
-		float elapsedTime = 0;
-		while (elapsedTime < animationTime)
+		yield return this.DoUnscaledTween01(t =>
 		{
 			if (music != null)
-				music.volume = PennerAnimation.CubicEaseOut(elapsedTime / animationTime, 0, 1, 1);
-			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(elapsedTime / animationTime, 0, 1, 1);
-			elapsedTime += Time.deltaTime;
-			yield return 0;
-		}
+				music.volume = PennerAnimation.CubicEaseOut(t, 0, 1, 1);
+			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(t, 0, 1, 1);
+		}, animationTime, () =>
+		{
+			callback?.Invoke();
+		});
+
 		fadeCanvasGroup.alpha = 1.0f;
 		if (music != null)
 			music.volume = 0;
 		if (waitTime > 0)
 			yield return new WaitForSeconds(waitTime);
+
 		SceneManager.LoadScene(sceneName);
 	}
 

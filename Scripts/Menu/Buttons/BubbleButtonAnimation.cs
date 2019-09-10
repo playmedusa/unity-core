@@ -30,7 +30,7 @@ public class BubbleButtonAnimation : ButtonAnimation
 		{
 			float scale = PennerAnimation.BackEaseOut(elapsedTime / animationTime, 0, 1, 1);
 			transform.localScale = pivotScale + Vector3.one * 0.25f * scale;
-			elapsedTime += Time.deltaTime;
+			elapsedTime += Time.unscaledDeltaTime;
 			yield return 0;
 		}
 		transform.localScale = pivotScale + Vector3.one * 0.25f;
@@ -40,7 +40,7 @@ public class BubbleButtonAnimation : ButtonAnimation
 			yield return 0;
 		}
 
-		yield return gameObject.DoTween01(t =>
+		yield return gameObject.DoUnscaledTween01(t =>
 		{
 			float scale = PennerAnimation.QuadEaseIn(t, 1, -1, 1);
 			transform.localScale = pivotScale + Vector3.one * 0.25f * scale;
@@ -56,7 +56,7 @@ public class BubbleButtonAnimation : ButtonAnimation
 		{
 			float s = PennerAnimation.CubicEaseInOut(elapsedTime, initScale, targetScale - initScale, animationTime);
 			transform.localScale = pivotScale * s * scaleFactor;
-			elapsedTime += Time.deltaTime;
+			elapsedTime += Time.unscaledDeltaTime;
 			yield return 0;
 		}
 		transform.localScale = pivotScale * targetScale * scaleFactor;
@@ -73,7 +73,7 @@ public class BubbleButtonAnimation : ButtonAnimation
 		{
 			float s = PennerAnimation.CubicEaseInOut(elapsedTime, initScale, targetScale - initScale, animationTime);
 			transform.localScale = pivotScale * s;
-			elapsedTime += Time.deltaTime;
+			elapsedTime += Time.unscaledDeltaTime;
 			yield return 0;
 		}
 		transform.localScale = pivotScale * targetScale;
@@ -92,7 +92,7 @@ public class BubbleButtonAnimation : ButtonAnimation
 		{
 			float s = PennerAnimation.ElasticEaseOut(elapsedTime, initScale, targetScale - initScale, tweenTime);
 			transform.localScale = pivotScale * s;
-			elapsedTime += Time.deltaTime;
+			elapsedTime += Time.unscaledDeltaTime;
 			//elastic out is a bit slow to finish, we force click here.
 			if (elapsedTime > tweenTime * 0.25f)
 			{
