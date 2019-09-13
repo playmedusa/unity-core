@@ -50,7 +50,7 @@ public static class ExtensionMethods
 	public static GameObject InstanceFromPool(this GameObject prefab, int poolSize, Transform parent)
 	{
 		GameObject instance = FXPool.getFXObject(prefab, poolSize);
-		instance.transform.parent = parent;
+		instance.transform.SetParent(parent);
 		instance.SetActive(true);
 		return instance;
 	}
@@ -63,7 +63,7 @@ public static class ExtensionMethods
 				Mathf.Clamp(maxIndex, 0, prefabArray.Length)
 			)];
 		GameObject instance = FXPool.getFXObject(prefab, poolSize);
-		instance.transform.parent = parent;
+		instance.transform.SetParent(parent);
 		instance.SetActive(true);
 		return instance;
 	}
