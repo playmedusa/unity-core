@@ -138,9 +138,9 @@ public class OverlayPopup : MonoBehaviour
 		background.alpha = Mathf.Lerp(
 			background.alpha,
 			(fsm.currentState == states.closed) ? 0 : 1,
-			Time.deltaTime * 5
+			Time.unscaledDeltaTime * 5
 		);
-		loadingWheel.Rotate(0, 0, Time.deltaTime * rotateSpeed);
+		loadingWheel.Rotate(0, 0, Time.unscaledDeltaTime * rotateSpeed);
 	}
 
 	IEnumerator closed()
@@ -163,7 +163,7 @@ public class OverlayPopup : MonoBehaviour
 		messagePopup.anchoredPosition = Vector3.down * screenOffset;
 		choosePopup.anchoredPosition = Vector3.down * screenOffset;
 
-		yield return this.DoTween01(t =>
+		yield return this.DoUnscaledTween01(t =>
 		{
 			//loadingPopup.localScale = Vector3.one * PennerAnimation.QuadEaseInOut(t, 0, 1, 1);
 			holder.localPosition = new Vector3(
@@ -179,7 +179,7 @@ public class OverlayPopup : MonoBehaviour
 		while (fsm.currentState == state)
 			yield return 0;
 
-		this.DoTween01(t =>
+		this.DoUnscaledTween01(t =>
 		{
 			//loadingPopup.localScale = Vector3.one * PennerAnimation.QuadEaseInOut(t, 1, -1, 1);
 			holder.localPosition = new Vector3(
