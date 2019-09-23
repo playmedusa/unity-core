@@ -12,7 +12,17 @@ public class AsyncSceneLoader : Singleton<AsyncSceneLoader>
 		DontDestroyOnLoad(gameObject);
 	}
 
-	IEnumerator LoadScene(string sceneName, UnityAction callback = null)
+	static public void LoadScene(string sceneName, UnityAction callback = null)
+	{
+		instance.StartCoroutine(instance.DoLoadScene(sceneName, callback));
+	}
+
+	static public void UnloadScene(string sceneName, UnityAction callback = null)
+	{
+		instance.StartCoroutine(instance.DoUnloadScene(sceneName, callback));
+	}
+
+	IEnumerator DoLoadScene(string sceneName, UnityAction callback = null)
 	{
 		var asyncScene = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 		float _loadingProgress;
@@ -37,7 +47,7 @@ public class AsyncSceneLoader : Singleton<AsyncSceneLoader>
 		callback?.Invoke();
 	}
 
-	IEnumerator UnloadScene(string sceneName, UnityAction callback = null)
+	IEnumerator DoUnloadScene(string sceneName, UnityAction callback = null)
 	{
 		var asyncScene = SceneManager.UnloadSceneAsync(sceneName);
 		float _unloadingProgress;
@@ -59,32 +69,6 @@ public class AsyncSceneLoader : Singleton<AsyncSceneLoader>
 			yield return null;
 		}
 		callback?.Invoke();
-	}
-
-	public void DoLoadScene(string sceneName, UnityAction callback = null)
-	{
-		StartCoroutine(LoadScene(sceneName, callback));
-	}
-
-	public void DoUnloadScene(string sceneName, UnityAction callback = null)
-	{
-		StartCoroutine(UnloadScene(sceneName, callback));
-	}
-
-	public void ShowVeil(UnityAction callback = null)
-	{
-		StartCoroutine(LoadScene("LoadingScreen", () =>
-		{
-			TransitionVeil.instance.ShowVeil(callback);
-		}));
-	}
-
-	public void HideVeil(UnityAction callback = null)
-	{
-		TransitionVeil.instance.HideVeil(() =>
-		{
-			StartCoroutine(UnloadScene("LoadingScreen", callback));
-		});
 	}
 
 }
