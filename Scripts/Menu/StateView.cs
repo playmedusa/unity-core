@@ -63,6 +63,14 @@ public class StateView : FSM<StateView.state>
 		if (ui == null)
 			ui = GetComponent<RectTransform>();
 	}
+
+	override public void ChangeState(state nextState)
+	{
+		if (!ui.gameObject.activeInHierarchy)
+			ui.gameObject.SetActive(true);
+		base.ChangeState(nextState);
+	}
+
 	virtual protected void Awake()
 	{
 		if (iOpenView == null)

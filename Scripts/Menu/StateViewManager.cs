@@ -31,6 +31,11 @@ public class StateViewManager : FSM<StateViewManager.state>
 	public StateView initialyOpen;
 	public StateView staticView;
 
+	public StateView previousView
+	{
+		get;
+		private set;
+	}
 	public StateView currentView
 	{
 		get;
@@ -166,6 +171,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 				yield return new WaitUntil(() => done);
 			}
 
+			previousView = currentView;
 			currentView = nextView;
 			done = false;
 
