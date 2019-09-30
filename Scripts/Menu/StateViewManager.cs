@@ -56,9 +56,8 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 	void OnRectTransformDimensionsChange()
 	{
-#if UNITY_EDITOR
-		Screen.orientation = ScreenOrientation.Landscape;
-#endif
+		ScreenOrientation orientation = Screen.width > Screen.height ? ScreenOrientation.Landscape : ScreenOrientation.Portrait;
+
 		switch (Screen.orientation)
 		{
 			case ScreenOrientation.LandscapeLeft:
@@ -74,6 +73,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 	void Start()
 	{
+		OnRectTransformDimensionsChange();
 		idc = FindObjectOfType<InputDeviceComponent>();
 		if (initialyOpen != null)
 			ShowStateView(initialyOpen);
