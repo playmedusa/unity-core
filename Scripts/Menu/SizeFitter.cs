@@ -11,7 +11,9 @@ public class SizeFitter : MonoBehaviour
 	[HideInInspector]
 	[SerializeField]
 	RectTransform canvasRectTransform;
-
+	[HideInInspector]
+	[SerializeField]
+	Vector2 pivotPosition;
 
 	public bool preserveAspect;
 	public float aspect;
@@ -25,7 +27,7 @@ public class SizeFitter : MonoBehaviour
 	{
 		rectTransform = GetComponent<RectTransform>();
 		canvasRectTransform = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
-
+		pivotPosition = rectTransform.anchoredPosition;
 		if (preserveAspect && aspect <= 0)
 		{
 			aspect = rectTransform.sizeDelta.x / rectTransform.sizeDelta.y;
@@ -37,6 +39,8 @@ public class SizeFitter : MonoBehaviour
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
+			OnDimensionsChange();
+		if (Vector3.Distance(rectTransform.anchoredPosition, pivotPosition) > 0.1f)
 			OnDimensionsChange();
 	}
 
@@ -82,6 +86,7 @@ public class SizeFitter : MonoBehaviour
 				height
 			);
 		}
+		rectTransform.anchoredPosition = pivotPosition;
 	}
 
 }
