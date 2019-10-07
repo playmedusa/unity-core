@@ -21,12 +21,19 @@ public partial class AudioInstance : Singleton<AudioInstance>
 		instance.aSource.PlayOneShot(clip, volume);
 	}
 
+	static public AudioSource LoopClipAtPoint(AudioClip clip, Vector3 pos, AudioMixerGroup outputMixer, float pitchRange)
+	{
+		AudioSource aSource = PlayClipAtPoint(clip, pos, outputMixer, pitchRange, false);
+		aSource.loop = true;
+		return aSource;
+	}
+
 	static public AudioSource PlayClipAtPoint(AudioClip clip, Vector3 pos)
 	{
 		return PlayClipAtPoint(clip, pos, null, 0);
 	}
 
-	static public AudioSource PlayClipAtPoint(AudioClip clip, Vector3 pos, AudioMixerGroup outputMixer, float pitchRange)
+	static public AudioSource PlayClipAtPoint(AudioClip clip, Vector3 pos, AudioMixerGroup outputMixer, float pitchRange, bool purge = true)
 	{
 		float lastStamp = -1;
 		instance.playerClipAtPointStamp.TryGetValue(clip.name, out lastStamp);
@@ -48,7 +55,8 @@ public partial class AudioInstance : Singleton<AudioInstance>
 		aSource.outputAudioMixerGroup = outputMixer;
 		aSource.Play();
 
-		Destroy(tempGO, clip.length);
+		if (purge)
+			Destroy(tempGO, clip.length);
 		return aSource;
 	}
 

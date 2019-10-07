@@ -30,10 +30,44 @@ public class FXSO : ScriptableObject
 			return sfxList[0];
 		}
 	}
+
 	public AudioMixerGroup outputMixer;
 
 	public AudioClip[] sfxList;
+	public bool loopSFX;
 	public float pitchRange = 0;
+
+	public void Raise(Vector3 position, out AudioSource audioSource, out GameObject[] vfx)
+	{
+		if (sfx != null)
+		{
+			if (loopSFX)
+				audioSource = AudioInstance.LoopClipAtPoint(sfx, position, outputMixer, pitchRange);
+			else
+			{
+				AudioInstance.PlayClipAtPoint(sfx, position, outputMixer, pitchRange);
+				audioSource = null;
+			}
+		}
+		else
+			audioSource = null;
+
+		vfx = new GameObject[visualFX.Length];
+		for (int i = 0; i < visualFX.Length; i++)
+		{
+			GameObject visualfx = visualFX[i];
+			GameObject instance = FXPool.getFXObject(visualfx, poolSize);
+			instance.transform.position = position;
+			instance.transform.rotation = visualfx.transform.rotation;
+			instance.transform.SetParent(null);
+			instance.transform.localScale = Vector3.one;
+			instance.SetActive(true);
+			VisualFX vFX = instance.GetComponent<VisualFX>();
+			if (vFX != null)
+				vFX.Play();
+			vfx[i] = instance;
+		}
+	}
 
 	public float Raise(Vector3 position, Quaternion rotation, Vector3 scale, Transform parent = null)
 	{
@@ -47,7 +81,6 @@ public class FXSO : ScriptableObject
 
 		foreach (GameObject visualFX in visualFX)
 		{
-
 			GameObject instance = FXPool.getFXObject(visualFX, poolSize);
 			instance.transform.position = position;
 			instance.transform.rotation = rotation;
