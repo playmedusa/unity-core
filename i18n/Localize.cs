@@ -28,9 +28,10 @@ public partial class Localize : MonoBehaviour
 
 	void Awake()
 	{
+		ProcessFonts();
 		if (textLabel != null)
 		{
-			ProcessFonts();
+
 			LocalizeTextLabel();
 		}
 	}
