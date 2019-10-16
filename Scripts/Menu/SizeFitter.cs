@@ -23,6 +23,8 @@ public class SizeFitter : MonoBehaviour
 	public float minXPadding;
 	public float minYPadding;
 
+	public bool force;
+
 	void OnValidate()
 	{
 		rectTransform = GetComponent<RectTransform>();
@@ -41,6 +43,9 @@ public class SizeFitter : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Space))
 			OnDimensionsChange();
 		if (Vector3.Distance(rectTransform.anchoredPosition, pivotPosition) > 0.1f)
+			OnDimensionsChange();
+
+		if (force)
 			OnDimensionsChange();
 	}
 
