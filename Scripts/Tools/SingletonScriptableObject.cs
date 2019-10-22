@@ -16,7 +16,10 @@ public abstract class SingletonScriptableObject<T> : ScriptableObject where T : 
 		get
 		{
 			if (!_instance)
+			{
 				_instance = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
+				(_instance as SingletonScriptableObject<T>).Init();
+			}
 			if (!_instance)
 			{
 				var assets = Resources.LoadAll<T>("SingletonScriptables/");
@@ -25,10 +28,14 @@ public abstract class SingletonScriptableObject<T> : ScriptableObject where T : 
 				else
 				{
 					Debug.LogError("Singleton missingin resources folder");
-					CreateInstance<T>();
+					_instance = CreateInstance<T>();
 				}
+				(_instance as SingletonScriptableObject<T>).Init();
 			}
 			return _instance;
 		}
 	}
+
+	virtual protected void Init() { }
+
 }
