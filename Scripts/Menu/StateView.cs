@@ -53,7 +53,11 @@ public class StateView : FSM<StateView.state>
 	public UnityAction onViewOpened;
 	public UnityAction onViewClosed;
 
-	protected CanvasGroup canvasGroup;
+	public CanvasGroup canvasGroup
+	{
+		get;
+		protected set;
+	}
 	bool viewReady;
 
 	void OnValidate()

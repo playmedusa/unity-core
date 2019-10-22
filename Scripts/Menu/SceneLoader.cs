@@ -28,12 +28,13 @@ public class SceneLoader : MonoBehaviour
 	public AudioSource music;
 	public float timeOut;
 	public float fadeInDelay;
+	public float defaultFadeTime = 0.5f;
 	public UnityEvent onTimeOut;
 
 	void Awake()
 	{
 		fadeCanvasGroup = GetComponent<CanvasGroup>();
-		StartCoroutine(FadeIn());
+		FadeIn();
 		if (onTimeOut != null)
 			Invoke("TimeOut", timeOut);
 	}
@@ -45,25 +46,29 @@ public class SceneLoader : MonoBehaviour
 
 	public void Load(string sceneName)
 	{
-		StartCoroutine(FadeOutAndLoad(sceneName, 0.5f, 0));
+		StartCoroutine(FadeOutAndLoad(sceneName, defaultFadeTime, 0));
 	}
 
 	public void Load(string sceneName, Action callback)
 	{
-		StartCoroutine(FadeOutAndLoad(sceneName, 0.5f, 0, callback));
+		StartCoroutine(FadeOutAndLoad(sceneName, defaultFadeTime, 0, callback));
 	}
 
-	public void Load(string sceneName, float animationTime = 0.5f, float waitTime = 0f)
+	public void Load(string sceneName, float animationTime, float waitTime)
 	{
 		StartCoroutine(FadeOutAndLoad(sceneName, animationTime, waitTime));
 	}
 
-	IEnumerator FadeIn(float animationTime = 0.5f)
+	public void FadeIn()
+	{
+		StartCoroutine(FadeIn(defaultFadeTime));
+	}
+
+	IEnumerator FadeIn(float animationTime)
 	{
 		fadeCanvasGroup.alpha = 1.0f;
 		yield return new WaitForSeconds(fadeInDelay);
-
-		yield return this.DoUnscaledTween01(t =>
+		yield return this.DoTween01(t =>
 		{
 			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(t, 1, -1, 1);
 		}, animationTime);
