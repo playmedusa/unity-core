@@ -92,7 +92,6 @@ public class FXSO : ScriptableObject
 			{
 				if (fxTime < vFX.displayTime)
 					fxTime = vFX.displayTime;
-
 				vFX.Play();
 			}
 		}
@@ -102,5 +101,18 @@ public class FXSO : ScriptableObject
 	public float Raise(Vector3 position, Quaternion rotation, Transform parent = null, float scale = 1)
 	{
 		return Raise(position, rotation, Vector3.one * scale, parent);
+	}
+	
+	public void Raise(Vector3 position, Quaternion rotation, out GameObject [] vfx, Transform parent = null, float scale = 1)
+	{
+		AudioSource audioSource;
+		Raise(position, out audioSource, out vfx);
+		foreach (GameObject gameObject in vfx)
+		{
+			Transform t = gameObject.transform;
+			t.SetParent(parent);
+			t.rotation = rotation;
+			t.localScale = Vector3.one * scale;
+		}
 	}
 }
