@@ -49,4 +49,11 @@ public class FSMObject<T>
 		}
 	}
 
+	public void StopFSM()
+	{
+		if (fsm != null)
+			owner.StopCoroutine(fsm);
+		fsm = null;
+	}
+
 }
