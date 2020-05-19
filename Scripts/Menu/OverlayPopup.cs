@@ -162,6 +162,7 @@ public class OverlayPopup : MonoBehaviour
 		loadingPopup.anchoredPosition = Vector3.down * screenOffset;
 		messagePopup.anchoredPosition = Vector3.down * screenOffset;
 		choosePopup.anchoredPosition = Vector3.down * screenOffset;
+		Canvas.ForceUpdateCanvases();
 
 		yield return this.DoUnscaledTween01(t =>
 		{

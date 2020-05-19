@@ -1,0 +1,15 @@
+﻿{
+	"name": "com.playmedusa.unity-core",
+	"displayName": "PlayMedusa Unity Core",
+	"description": "Common tools used in several projects.",
+	"version": "1.0.0",
+	"unity": "2019.3",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"src": "Assets/",
+	"author": "PlayMedusa <info@playmedusa.com>",
+	"dependencies": {}
+}
