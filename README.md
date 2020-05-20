@@ -1,4 +1,14 @@
 # unity-core
+## Setup as unity package
+Just add as a dependency in you manifest.json:
+```
+{
+  "dependencies": {
+    "com.playmedusa.unity-core": "https://github.com/playmedusa/unity-core.git",
+    ...
+  }
+}
+```
 ## Setting this project as git submodule
 Example to add this repository as a submodule to an existing unity project:
 ```
