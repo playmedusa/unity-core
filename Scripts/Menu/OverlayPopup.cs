@@ -1,38 +1,18 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mgl;
 using TMPro;
 
-public class OverlayPopup : MonoBehaviour
+public class OverlayPopup : Singleton<OverlayPopup>
 {
-
-	private static OverlayPopup _instance;
-	public static OverlayPopup instance
-	{
-		get
-		{
-			if (_instance == null)
-				_instance = FindObjectOfType<OverlayPopup>();
-			if (_instance == null)
-			{
-				Debug.Log("OverlayPopup not found, instantiating");
-				var res = Resources.Load("OverlayPopup", typeof(GameObject)) as GameObject;
-				GameObject go = GameObject.Instantiate(res);
-				_instance = go.GetComponent<OverlayPopup>();
-				_instance.Init();
-			}
-			return _instance;
-		}
-	}
-
 	enum states
 	{
 		closed,
 		loading,
 		showMessage,
-		showChoose
+		showChoose,
+		showInput
 	}
 	FSMObject<states> fsm;
 	bool initialized = false;
@@ -59,6 +39,13 @@ public class OverlayPopup : MonoBehaviour
 	Action yesCallback = null;
 	Action noCallback = null;
 
+	[Header("Input popup")]
+	public RectTransform inputPopup;
+	public TextMeshProUGUI inputTitle;
+	public TextMeshProUGUI inputBody;
+	public TMP_InputField inputField;
+	Action<string> okInputCallback = null;
+
 	public float screenOffset
 	{
 		get
@@ -71,7 +58,7 @@ public class OverlayPopup : MonoBehaviour
 	public float rotateSpeed = 50;
 
 
-	void Awake()
+	void Start()
 	{
 		if (instance != this)
 			Destroy(gameObject);
@@ -79,20 +66,27 @@ public class OverlayPopup : MonoBehaviour
 		Init();
 	}
 
-	void Init()
+	protected override void Init()
 	{
 		if (initialized) return;
+		
+		var res = Resources.Load("OverlayPopup", typeof(GameObject)) as GameObject;
+		if (res == null)
+			res = Resources.Load("OverlayPopup_Default", typeof(GameObject)) as GameObject;
+		GameObject go = Instantiate(res);
+		_instance = go.GetComponent<OverlayPopup>();
 
-		fsm = new FSMObject<states>(this);
-		loadingPopup.anchoredPosition = Vector3.down * screenOffset;
-		messagePopup.anchoredPosition = Vector3.down * screenOffset;
-		choosePopup.anchoredPosition = Vector3.down * screenOffset;
+		_instance.fsm = new FSMObject<states>(_instance);
+		_instance.loadingPopup.anchoredPosition = Vector3.down * _instance.screenOffset;
+		_instance.messagePopup.anchoredPosition = Vector3.down * _instance.screenOffset;
+		_instance.choosePopup.anchoredPosition = Vector3.down * _instance.screenOffset;
 
-		background.interactable = false;
-		background.blocksRaycasts = false;
-		background.alpha = 0;
+		_instance.background.interactable = false;
+		_instance.background.blocksRaycasts = false;
+		_instance.background.alpha = 0;
 
-		initialized = true;
+		_instance.initialized = true;
+		Destroy(gameObject);
 	}
 
 	public void ShowLoading()
@@ -126,6 +120,16 @@ public class OverlayPopup : MonoBehaviour
 		chooseTitle.text = I18n.T(title);
 		chooseBody.text = I18n.T(message);
 		fsm.ChangeState(states.showChoose);
+	}
+
+	public void ShowInput(string title, string description, Action<string> okInputCallback = null, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
+	{
+		this.okInputCallback = okInputCallback;
+		inputTitle.text = I18n.T(title);
+		inputBody.text = I18n.T(description);
+		inputField.text = "";
+		inputField.contentType = contentType;
+		fsm.ChangeState(states.showInput);
 	}
 
 	public void ClosePopup()
@@ -216,6 +220,12 @@ public class OverlayPopup : MonoBehaviour
 	public void NoButton()
 	{
 		noCallback?.Invoke();
+		ClosePopup();
+	}
+
+	public void OkInputButton()
+	{
+		okInputCallback?.Invoke(inputField.text);
 		ClosePopup();
 	}
 

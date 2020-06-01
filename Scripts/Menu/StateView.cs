@@ -27,11 +27,10 @@ public class StateView : FSM<StateView.state>
 	public GameObject m_PreviouslySelected;
 
 	public float animationTime = 1;
-	//TODO [SerializeReference]
+
+	ISetupView iSetupView;
 	IOpenView iOpenView;
-	//TODO [SerializeReference]
 	ICloseView iCloseView;
-	//TODO [SerializeReference]
 	IExecuteView iExecuteView;
 
 	public bool isReady
@@ -77,6 +76,8 @@ public class StateView : FSM<StateView.state>
 
 	virtual protected void Awake()
 	{
+		if (iSetupView == null)
+			iSetupView = GetComponentInChildren<ISetupView>();
 		if (iOpenView == null)
 			iOpenView = GetComponentInChildren<IOpenView>();
 		if (iCloseView == null)
@@ -84,6 +85,7 @@ public class StateView : FSM<StateView.state>
 		if (iExecuteView == null)
 			iExecuteView = GetComponentInChildren<IExecuteView>();
 		canvasGroup = ui.GetComponent<CanvasGroup>();
+		
 		if (canvasGroup != null)
 		{
 			canvasGroup.alpha = 0;
@@ -109,6 +111,8 @@ public class StateView : FSM<StateView.state>
 
 	IEnumerator open()
 	{
+		if (iSetupView != null)
+			yield return iSetupView.SetupView().AsIEnumerator();
 		transform.SetAsLastSibling();
 		if (canvasGroup != null)
 		{
@@ -138,7 +142,7 @@ public class StateView : FSM<StateView.state>
 			if (iExecuteView != null)
 				yield return StartCoroutine(iExecuteView.Execute());
 			else
-				yield return StartCoroutine(Execute());
+				yield break;
 		}
 	}
 
@@ -183,11 +187,6 @@ public class StateView : FSM<StateView.state>
 			}, animationTime);
 
 		}
-		yield break;
-	}
-
-	protected virtual IEnumerator Execute()
-	{
 		yield break;
 	}
 
