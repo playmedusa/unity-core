@@ -128,6 +128,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 		this.newStateView = callback;
 		ShowStateView(nextView);
 	}
+	
 	public void ShowStateView(StateView nextView)
 	{
 		ShowStateView(nextView, false);
@@ -148,6 +149,11 @@ public class StateViewManager : FSM<StateViewManager.state>
 	public void SetUsingMouse(bool status)
 	{
 		isUsingMouse = status;
+	}
+	
+	public void HideStaticView()
+	{
+		if (staticView != null) staticView.Hide();
 	}
 
 	IEnumerator showView()

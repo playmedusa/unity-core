@@ -47,6 +47,8 @@ public static class TaskExtensions
 
 	public static IEnumerator AsIEnumerator(this Task task)
 	{
+		if (task == null)
+			yield break;
 		while (!task.IsCompleted)
 		{
 			yield return null;
