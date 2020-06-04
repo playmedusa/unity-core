@@ -301,20 +301,24 @@ public class SharedOneTimeAnimations : MonoBehaviour {
 
 	public static IEnumerator FadeTextToFullAlpha(Text text, float animationTime)
     {
-        text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
-        while (text.color.a < 1.0f)
-        {
-            text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a + (Time.deltaTime / animationTime));
+	    var color = text.color;
+	    text.color = new Color(color.r, color.g, color.b, 0);
+	    while (text.color.a < 1.0f)
+	    {
+		    color = text.color;
+            text.color = new Color(color.r, color.g, color.b, color.a + (Time.deltaTime / animationTime));
             yield return null;
         }
     }
  
     public static IEnumerator FadeTextToZeroAlpha(Text text, float animationTime)
     {
-        text.color = new Color(text.color.r, text.color.g, text.color.b, 1);
-        while (text.color.a > 0.0f)
-        {
-            text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - (Time.deltaTime / animationTime));
+	    var color = text.color;
+	    text.color = new Color(color.r, color.g, color.b, 1);
+	    while (text.color.a > 0.0f)
+	    {
+		    color = text.color;
+		    text.color = new Color(color.r, color.g, color.b, color.a - (Time.deltaTime / animationTime));
             yield return null;
         }
     }
