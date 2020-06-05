@@ -211,6 +211,11 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		yield return StartCoroutine(showView(choosePopup, states.showChoose));
 	}
 
+	IEnumerator showInput()
+	{
+		yield return StartCoroutine(showView(inputPopup, states.showInput));
+	}
+
 	public void YesButton()
 	{
 		yesCallback?.Invoke();
