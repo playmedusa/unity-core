@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using Mgl;
 using TMPro;
@@ -122,7 +123,7 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showChoose);
 	}
 
-	public void ShowInput(string title, string description, Action<string> okInputCallback = null, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
+	public void ShowInput(string title, string description, Action<string> okInputCallback, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
 	{
 		this.okInputCallback = okInputCallback;
 		inputTitle.text = I18n.T(title);
@@ -130,6 +131,22 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		inputField.text = "";
 		inputField.contentType = contentType;
 		fsm.ChangeState(states.showInput);
+	}
+	
+	public async Task<string> ShowInput(string title, string description, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
+	{
+		var response = "";
+		okInputCallback = s =>
+		{
+			response = s;
+		};
+		inputTitle.text = I18n.T(title);
+		inputBody.text = I18n.T(description);
+		inputField.text = "";
+		inputField.contentType = contentType;
+		fsm.ChangeState(states.showInput);
+		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showInput);
+		return response;
 	}
 
 	public void ClosePopup()
