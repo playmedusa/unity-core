@@ -8,7 +8,7 @@ public static class ScriptableObjectExtensionMethods
 		try
 		{
 			System.IO.File.WriteAllText(
-				string.Format(path + "{0}.data", scriptable.name),
+				$"{path}/{scriptable.name}.data",
 				JsonUtility.ToJson(scriptable)
 			);
 			return true;
@@ -21,7 +21,7 @@ public static class ScriptableObjectExtensionMethods
 
 	public static bool LoadFromJSON(this ScriptableObject scriptable, string path)
 	{
-		path = string.Format(path + "{0}.data", scriptable.name);
+		path = $"{path}/{scriptable.name}.data";
 		if (System.IO.File.Exists(path))
 		{
 			string str = System.IO.File.ReadAllText(path);
