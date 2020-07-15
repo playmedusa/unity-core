@@ -31,9 +31,9 @@ public class FSMObject<T>
 		{
 			lastState = currentState;
 			yield return owner.StartCoroutine(currentState.ToString());
-			if (callback[lastState] != null)
+			if (callback.TryGetValue(lastState, out var cb))
 			{
-				callback[lastState].Invoke();
+				cb?.Invoke();
 				callback[lastState] = null;
 			}
 		}
@@ -41,7 +41,7 @@ public class FSMObject<T>
 
 	public virtual void ChangeState(T nextState, UnityAction onChangeStateCallback = null)
 	{
-		this.callback[nextState] = onChangeStateCallback;
+		callback[nextState] = onChangeStateCallback;
 		currentState = nextState;
 		if (fsm == null)
 		{
