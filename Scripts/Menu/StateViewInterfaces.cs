@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+public interface IInitView
+{
+	void IInitView(StateView sv);
+}
+
 public interface IExecuteView
 {
 	IEnumerator Execute();

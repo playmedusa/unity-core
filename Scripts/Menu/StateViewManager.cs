@@ -52,7 +52,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 	}
 
 	InputDeviceComponent idc;
-	UnityAction newStateView;
+	UnityAction onNextViewOpen;
 
 	void OnRectTransformDimensionsChange()
 	{
@@ -111,7 +111,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 	public void ShowStateView(StateView nextView, bool lockView, UnityAction callback)
 	{
 		if (this.lockView) return;
-		this.newStateView = callback;
+		this.onNextViewOpen = callback;
 		ShowStateView(nextView, lockView);
 	}
 
@@ -125,7 +125,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 	public void ShowStateView(StateView nextView, UnityAction callback = null)
 	{
-		this.newStateView = callback;
+		this.onNextViewOpen = callback;
 		ShowStateView(nextView);
 	}
 	
@@ -136,7 +136,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 	public void UnlockAndShowStateView(StateView nextView, UnityAction callback = null)
 	{
-		this.newStateView = callback;
+		this.onNextViewOpen = callback;
 		UnlockAndShowStateView(nextView);
 	}
 
@@ -196,7 +196,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 			yield return new WaitUntil(() => done);
 
-			CallCallback();
+			InvokeCallback();
 			SelectBestCandidate();
 
 			if (currentView == nextView)
@@ -224,10 +224,10 @@ public class StateViewManager : FSM<StateViewManager.state>
 		}
 	}
 
-	void CallCallback()
+	void InvokeCallback()
 	{
-		newStateView?.Invoke();
-		newStateView = null;
+		onNextViewOpen?.Invoke();
+		onNextViewOpen = null;
 	}
 
 	void HandleStaticViewVisibility()

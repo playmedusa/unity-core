@@ -18,15 +18,18 @@ public class StateView : FSM<StateView.state>
 	public StateViewManager svm;
 
 	[Header("StateView config")]
-	public bool skipAutoselect;
+	public bool hideOnAwake = true;
+	public bool disableCanvasOnHide = true;
 	public bool showStatic;
 	public bool rememberPreviouslySelected;
 	public bool showMouse = true;
 	public bool showCursor;
+	public bool skipAutoselect;
 	public GameObject m_PreviouslySelected;
 
 	public float animationTime = 1;
 
+	IInitView iInitView;
 	ISetupView iSetupView;
 	IOpenView iOpenView;
 	ICloseView iCloseView;
@@ -75,23 +78,32 @@ public class StateView : FSM<StateView.state>
 
 	virtual protected void Awake()
 	{
-		if (iSetupView == null)
-			iSetupView = GetComponentInChildren<ISetupView>();
-		if (iOpenView == null)
-			iOpenView = GetComponentInChildren<IOpenView>();
-		if (iCloseView == null)
-			iCloseView = GetComponentInChildren<ICloseView>();
-		if (iExecuteView == null)
-			iExecuteView = GetComponentInChildren<IExecuteView>();
+		iInitView = GetComponentInChildren<IInitView>();
+		iSetupView = GetComponentInChildren<ISetupView>();
+		iOpenView = GetComponentInChildren<IOpenView>();
+		iCloseView = GetComponentInChildren<ICloseView>();
+		iExecuteView = GetComponentInChildren<IExecuteView>();
 		canvasGroup = ui.GetComponent<CanvasGroup>();
 		
-		if (canvasGroup != null)
-		{
+		if (hideOnAwake) {
+			if (canvasGroup == null)
+				canvasGroup = gameObject.AddComponent<CanvasGroup>();
+			
 			canvasGroup.alpha = 0;
+			DisableCanvasIfNeeded();
+		}
+
+		ui.anchoredPosition = Vector2.zero;
+		iInitView?.InitView(this);
+	}
+
+	void DisableCanvasIfNeeded()
+	{
+		if (disableCanvasOnHide && canvasGroup != null)
+		{
 			canvasGroup.interactable = false;
 			canvasGroup.blocksRaycasts = false;
 		}
-		ui.anchoredPosition = Vector2.zero;
 	}
 
 	public void Show(UnityAction callback = null)
@@ -147,11 +159,7 @@ public class StateView : FSM<StateView.state>
 
 	IEnumerator close()
 	{
-		if (canvasGroup != null)
-		{
-			canvasGroup.interactable = false;
-			canvasGroup.blocksRaycasts = false;
-		}
+		DisableCanvasIfNeeded();
 		while (currentState == state.close)
 		{
 			if (iCloseView != null)
