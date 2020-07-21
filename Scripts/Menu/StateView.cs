@@ -19,7 +19,6 @@ public class StateView : FSM<StateView.state>
 
 	[Header("StateView config")]
 	public bool hideOnAwake = true;
-	public bool disableCanvasOnHide = true;
 	public bool showStatic;
 	public bool rememberPreviouslySelected;
 	public bool showMouse = true;
@@ -35,21 +34,8 @@ public class StateView : FSM<StateView.state>
 	ICloseView iCloseView;
 	IExecuteView iExecuteView;
 
-	public bool isReady
-	{
-		get
-		{
-			return isActiveAndEnabled && viewReady;
-		}
-	}
-
-	public bool isOpen
-	{
-		get
-		{
-			return currentState == state.open || currentState == state.execute;
-		}
-	}
+	public bool isReady => isActiveAndEnabled && viewReady;
+	public bool isOpen => currentState == state.open || currentState == state.execute;
 
 	public UnityAction onViewOpened;
 	public UnityAction onViewClosed;
@@ -85,25 +71,21 @@ public class StateView : FSM<StateView.state>
 		iExecuteView = GetComponentInChildren<IExecuteView>();
 		canvasGroup = ui.GetComponent<CanvasGroup>();
 		
-		if (hideOnAwake) {
-			if (canvasGroup == null)
-				canvasGroup = gameObject.AddComponent<CanvasGroup>();
-			
-			canvasGroup.alpha = 0;
-			DisableCanvasIfNeeded();
-		}
+		if (hideOnAwake)
+			HideCanvas();
 
 		ui.anchoredPosition = Vector2.zero;
 		iInitView?.InitView(this);
 	}
 
-	void DisableCanvasIfNeeded()
+	void HideCanvas()
 	{
-		if (disableCanvasOnHide && canvasGroup != null)
-		{
-			canvasGroup.interactable = false;
-			canvasGroup.blocksRaycasts = false;
-		}
+		if (canvasGroup == null)
+			canvasGroup = gameObject.AddComponent<CanvasGroup>();
+			
+		canvasGroup.alpha = 0;
+		canvasGroup.interactable = false;
+		canvasGroup.blocksRaycasts = false;
 	}
 
 	public void Show(UnityAction callback = null)
@@ -125,11 +107,13 @@ public class StateView : FSM<StateView.state>
 		if (iSetupView != null)
 			yield return iSetupView.SetupView().AsIEnumerator();
 		transform.SetAsLastSibling();
+
 		if (canvasGroup != null)
 		{
 			canvasGroup.interactable = true;
 			canvasGroup.blocksRaycasts = true;
 		}
+
 		while (currentState == state.open)
 		{
 			if (iOpenView != null)
@@ -159,7 +143,12 @@ public class StateView : FSM<StateView.state>
 
 	IEnumerator close()
 	{
-		DisableCanvasIfNeeded();
+		if (canvasGroup != null)
+		{
+			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
+		}
+
 		while (currentState == state.close)
 		{
 			if (iCloseView != null)
@@ -184,32 +173,23 @@ public class StateView : FSM<StateView.state>
 
 	public virtual IEnumerator Open()
 	{
-		if (canvasGroup != null)
+		if (canvasGroup == null) yield break;
+		
+		yield return this.DoTween01(t =>
 		{
-			canvasGroup.interactable = true;
-			canvasGroup.blocksRaycasts = true;
-			yield return this.DoTween01(t =>
-			{
-				canvasGroup.alpha = Mathf.Lerp(0, 1, t);
-			}, animationTime);
-
-		}
-		yield break;
+			canvasGroup.alpha = Mathf.Lerp(0, 1, t);
+		}, animationTime);
 	}
 
 	public virtual IEnumerator Close()
 	{
-		if (canvasGroup != null)
+		if (canvasGroup == null) yield break;
+		
+		float startAlpha = canvasGroup.alpha;
+		yield return this.DoTween01(t =>
 		{
-			float startAlpha = canvasGroup.alpha;
-			yield return this.DoTween01(t =>
-			{
-				canvasGroup.alpha = Mathf.Lerp(startAlpha, 0, t);
-			}, animationTime * 0.5f);
-			canvasGroup.interactable = false;
-			canvasGroup.blocksRaycasts = false;
-		}
-		yield break;
+			canvasGroup.alpha = Mathf.Lerp(startAlpha, 0, t);
+		}, animationTime * 0.5f);
 	}
 
 }
