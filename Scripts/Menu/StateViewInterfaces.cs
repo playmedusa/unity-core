@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface IInitView
 {
-	void IInitView(StateView sv);
+	void InitView(StateView sv);
 }
 
 public interface IExecuteView

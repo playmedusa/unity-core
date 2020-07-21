@@ -55,14 +55,14 @@ public class StateView : FSM<StateView.state>
 			ui = GetComponent<RectTransform>();
 	}
 
-	override public void ChangeState(state nextState)
+	public void ChangeState(state nextState)
 	{
 		if (!ui.gameObject.activeInHierarchy)
 			ui.gameObject.SetActive(true);
 		base.ChangeState(nextState);
 	}
 
-	virtual protected void Awake()
+	void Awake()
 	{
 		iInitView = GetComponentInChildren<IInitView>();
 		iSetupView = GetComponentInChildren<ISetupView>();
@@ -70,7 +70,7 @@ public class StateView : FSM<StateView.state>
 		iCloseView = GetComponentInChildren<ICloseView>();
 		iExecuteView = GetComponentInChildren<IExecuteView>();
 		canvasGroup = ui.GetComponent<CanvasGroup>();
-		
+
 		if (hideOnAwake)
 			HideCanvas();
 
@@ -107,13 +107,11 @@ public class StateView : FSM<StateView.state>
 		if (iSetupView != null)
 			yield return iSetupView.SetupView().AsIEnumerator();
 		transform.SetAsLastSibling();
-
 		if (canvasGroup != null)
 		{
 			canvasGroup.interactable = true;
 			canvasGroup.blocksRaycasts = true;
 		}
-
 		while (currentState == state.open)
 		{
 			if (iOpenView != null)

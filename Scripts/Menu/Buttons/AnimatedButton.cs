@@ -2,11 +2,9 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections;
 
 public class AnimatedButton : Selectable, IPointerClickHandler
 {
-	[Description("Allows the button to be clicked even if the view is not ready / closed.")]
 	public bool ignoreStateView;
 	public UnityEvent OnClick;
 	ButtonAnimation buttonAnimation;

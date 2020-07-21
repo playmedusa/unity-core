@@ -186,6 +186,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 			if (currentView == null)
 			{
 				ChangeState(state.idle);
+				InvokeCallback();
 				yield break;
 			}
 
@@ -234,6 +235,13 @@ public class StateViewManager : FSM<StateViewManager.state>
 	{
 		if (staticView != null)
 		{
+			if (currentView == null)
+			{
+				if (!staticView.isOpen)
+					staticView.Show();
+				return;
+			} 
+			
 			if (currentView.showStatic && !staticView.isOpen)
 				staticView.Show();
 			else if (!currentView.showStatic && staticView.isOpen)
