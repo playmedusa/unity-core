@@ -55,7 +55,7 @@ public class StateView : FSM<StateView.state>
 			ui = GetComponent<RectTransform>();
 	}
 
-	public void ChangeState(state nextState)
+	public override void ChangeState(state nextState)
 	{
 		if (!ui.gameObject.activeInHierarchy)
 			ui.gameObject.SetActive(true);

@@ -106,12 +106,24 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showMessage);
 	}
 
+	public async Task ShowMessageAsync(string title, string message)
+	{
+		ShowMessage(title, message);
+		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showMessage);
+	}
+
 	public void ShowError(string message, Action callback = null)
 	{
 		this.callback = callback;
 		messageTitle.text = I18n.T("Oops!");
 		messageBody.text = I18n.T(message);
 		fsm.ChangeState(states.showMessage);
+	}
+	
+	public async Task ShowErrorAsync(string message)
+	{
+		ShowError(message);
+		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showMessage);
 	}
 
 	public void ShowChoose(string title, string message, Action yesCallback = null, Action noCallback = null)
@@ -121,6 +133,14 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		chooseTitle.text = I18n.T(title);
 		chooseBody.text = I18n.T(message);
 		fsm.ChangeState(states.showChoose);
+	}
+	
+	public async Task<bool> ShowChooseAsync(string title, string message)
+	{
+		bool accepted = false;
+		ShowChoose(title, message, () => { accepted = true;});
+		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showChoose);
+		return accepted;
 	}
 
 	public void ShowInput(string title, string description, Action<string> okInputCallback, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
@@ -133,7 +153,7 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showInput);
 	}
 	
-	public async Task<string> ShowInput(string title, string description, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
+	public async Task<string> ShowInputAsync(string title, string description, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
 	{
 		var response = "";
 		okInputCallback = s =>
