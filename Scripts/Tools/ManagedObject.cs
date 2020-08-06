@@ -16,6 +16,12 @@ public abstract class ManagedObject : ScriptableObject
     {
         EditorUtility.RevealInFinder(Application.persistentDataPath);
     }
+    
+    [MenuItem("Tools/Clear PlayerPrefs")]
+    private static void ClearPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 
     protected void OnEnable()
     {
