@@ -674,9 +674,9 @@ public class PennerAnimation
     /// <param name="c">Final value.</param>
     /// <param name="d">Duration of animation.</param>
     /// <returns>The correct value.</returns>
-    public static float BackEaseOut( float t, float b, float c, float d )
+    public static float BackEaseOut( float t, float b, float c, float d, float s = 1.70158f)
     {
-        return c * ( ( t = t / d - 1 ) * t * ( ( 1.70158f + 1 ) * t + 1.70158f ) + 1 ) + b;
+        return c * ( ( t = t / d - 1 ) * t * ( ( s + 1 ) * t + s ) + 1 ) + b;
     }
 
     /// <summary>
@@ -688,9 +688,9 @@ public class PennerAnimation
     /// <param name="c">Final value.</param>
     /// <param name="d">Duration of animation.</param>
     /// <returns>The correct value.</returns>
-    public static float BackEaseIn( float t, float b, float c, float d )
+    public static float BackEaseIn(float t, float b, float c, float d, float s = 1.70158f)
     {
-        return c * ( t /= d ) * t * ( ( 1.70158f + 1 ) * t - 1.70158f ) + b;
+        return c * ( t /= d ) * t * ( ( s + 1 ) * t - s ) + b;
     }
 
     /// <summary>
@@ -702,12 +702,11 @@ public class PennerAnimation
     /// <param name="c">Final value.</param>
     /// <param name="d">Duration of animation.</param>
     /// <returns>The correct value.</returns>
-    public static float BackEaseInOut( float t, float b, float c, float d )
+    public static float BackEaseInOut( float t, float b, float c, float d, float s = 1.70158f, float s2 = 1.525f )
     {
-        float s = 1.70158f;
         if ( ( t /= d / 2 ) < 1 )
-            return c / 2 * ( t * t * ( ( ( s *= ( 1.525f ) ) + 1 ) * t - s ) ) + b;
-        return c / 2 * ( ( t -= 2 ) * t * ( ( ( s *= ( 1.525f ) ) + 1 ) * t + s ) + 2 ) + b;
+            return c / 2 * ( t * t * ( ( ( s *= ( s2 ) ) + 1 ) * t - s ) ) + b;
+        return c / 2 * ( ( t -= 2 ) * t * ( ( ( s *= ( s2 ) ) + 1 ) * t + s ) + 2 ) + b;
     }
 
     /// <summary>

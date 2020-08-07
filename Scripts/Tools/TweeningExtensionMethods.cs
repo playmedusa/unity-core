@@ -9,6 +9,16 @@ public static class TweeningExtensionMethods
 		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
 	}
 
+	public static Vector2 LerpUnclampedFrom(this Vector2 targetPosition, Vector2 offset, float t)
+	{
+		return Vector2.LerpUnclamped(targetPosition + offset, targetPosition, t);
+	}
+	
+	public static Vector3 LerpUnclampedFrom(this Vector3 targetPosition, Vector3 offset, float t)
+	{
+		return Vector3.LerpUnclamped(targetPosition + offset, targetPosition, t);
+	}
+
 	public static Coroutine StartCoroutine(this UnityEngine.GameObject obj, IEnumerator coroutine)
 	{
 		MonoBehaviour mb = obj.GetComponent<MonoBehaviour>();
@@ -39,6 +49,24 @@ public static class TweeningExtensionMethods
 	public static Coroutine DoTween01(this UnityEngine.GameObject obj, System.Action<float> step, float animationTime, System.Action callback = null)
 	{
 		IEnumerator tween = obj.Tween01(step, animationTime, callback);
+		return obj.StartCoroutine(tween);
+	}
+	
+	public static IEnumerator DelayedTween01(this UnityEngine.Object obj, System.Action<float> step, float animationTime, float delayTime, System.Action callback = null)
+	{
+		step(0f);
+		yield return new WaitForSeconds(delayTime);
+		yield return obj.Tween01( step, animationTime, callback);
+	}
+	
+	public static Coroutine DoDelayedTween01(this UnityEngine.Component c, System.Action<float> step, float animationTime, float delayTime, System.Action callback = null)
+	{
+		return c.gameObject.DoDelayedTween01(step, animationTime, delayTime, callback);
+	}
+	
+	public static Coroutine DoDelayedTween01(this UnityEngine.GameObject obj, System.Action<float> step, float animationTime, float delayTime, System.Action callback = null)
+	{
+		IEnumerator tween = obj.DelayedTween01(step, animationTime, delayTime, callback);
 		return obj.StartCoroutine(tween);
 	}
 
