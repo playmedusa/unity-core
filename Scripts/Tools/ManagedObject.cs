@@ -3,7 +3,9 @@
 using UnityEditor;
 #endif
  
+#if UNITY_EDITOR
 [InitializeOnLoad]
+#endif
 public abstract class ManagedObject : ScriptableObject
 {
     public abstract void OnBegin();
