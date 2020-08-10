@@ -37,6 +37,11 @@ public class AnimatedButton : Selectable, IPointerClickHandler
 
 	float deselectTime;
 
+	void Reset()
+	{
+		transition = Transition.None;
+	}
+
 	protected override void Awake()
 	{
 		base.Awake();

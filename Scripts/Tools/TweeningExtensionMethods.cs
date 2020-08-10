@@ -8,6 +8,16 @@ public static class TweeningExtensionMethods
 	{
 		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
 	}
+	
+	public static Vector2 LerpUnclampedTo(this Vector2 targetPosition, Vector2 offset, float t)
+	{
+		return Vector2.LerpUnclamped(targetPosition, targetPosition + offset, t);
+	}
+	
+	public static Vector3 LerpUnclampedTo(this Vector3 targetPosition, Vector3 offset, float t)
+	{
+		return Vector3.LerpUnclamped(targetPosition, targetPosition + offset, t);
+	}
 
 	public static Vector2 LerpUnclampedFrom(this Vector2 targetPosition, Vector2 offset, float t)
 	{

@@ -3,15 +3,18 @@ using System.Collections;
 using UnityEngine.EventSystems;
 public class PressButtonAnimation : ButtonAnimation
 {
-
+	public float scaleFactor = 0.1f;
+	
 	Vector3 pivotScale;
-	float scaleFactor = 1f;
+
+	public void Reset()
+	{
+		animationTime = 0.1f;
+	}
 
 	void Start()
 	{
-		animationTime = 0.1f;
-		pivotScale = Vector3.one * scaleFactor;
-		transform.localScale = pivotScale;
+		pivotScale = transform.localScale;
 	}
 
 	override public IEnumerator Idle()
@@ -33,16 +36,14 @@ public class PressButtonAnimation : ButtonAnimation
 	override public IEnumerator Press()
 	{
 		float elapsedTime = 0;
-		float initScale = 1.0f;
-		float targetScale = 1.1f;
 		while (currentState == state.Press && elapsedTime < animationTime)
 		{
-			float s = PennerAnimation.CubicEaseInOut(elapsedTime, initScale, targetScale - initScale, animationTime);
-			transform.localScale = pivotScale * s * scaleFactor;
+			float s = PennerAnimation.CubicEaseInOut(elapsedTime, 1f, scaleFactor, animationTime);
+			transform.localScale = pivotScale * s;
 			elapsedTime += Time.unscaledDeltaTime;
 			yield return 0;
 		}
-		transform.localScale = pivotScale * targetScale * scaleFactor;
+		transform.localScale = pivotScale * (1 + scaleFactor);
 		while (currentState == state.Press)
 			yield return 0;
 	}
@@ -50,16 +51,15 @@ public class PressButtonAnimation : ButtonAnimation
 	override public IEnumerator Release()
 	{
 		float elapsedTime = 0;
-		float initScale = 1.1f;
-		float targetScale = 1.0f;
+		float initScale = 1 + scaleFactor;
 		while (currentState == state.Release && elapsedTime < animationTime)
 		{
-			float s = PennerAnimation.CubicEaseInOut(elapsedTime, initScale, targetScale - initScale, animationTime);
+			float s = PennerAnimation.CubicEaseInOut(elapsedTime, initScale, -scaleFactor, animationTime);
 			transform.localScale = pivotScale * s;
 			elapsedTime += Time.unscaledDeltaTime;
 			yield return 0;
 		}
-		transform.localScale = pivotScale * targetScale;
+		transform.localScale = pivotScale;
 		if (currentState == state.Release)
 			ChangeState(state.Idle);
 	}
@@ -67,23 +67,22 @@ public class PressButtonAnimation : ButtonAnimation
 	override public IEnumerator Click()
 	{
 		float elapsedTime = 0;
-		float initScale = 1.1f;
-		float targetScale = 1.0f;
-		float tweenTime = animationTime * 8.0f;
+		float initScale = 1 + scaleFactor;
+		float tweenTime = animationTime * 3.0f;
 		clickTrigered = false;
 		while (/*currentState == state.Click &&*/ elapsedTime < tweenTime)
 		{
-			float s = PennerAnimation.CubicEaseOut(elapsedTime, initScale, targetScale - initScale, tweenTime);
+			float s = PennerAnimation.CubicEaseOut(elapsedTime, initScale, -scaleFactor, tweenTime);
 			transform.localScale = pivotScale * s;
 			elapsedTime += Time.unscaledDeltaTime;
 			//elastic out is a bit slow to finish, we force click here.
-			if (elapsedTime > tweenTime * 0.25f)
+			if (elapsedTime > tweenTime * 0.35f)
 			{
 				TrigerClick();
 			}
 			yield return 0;
 		}
-		transform.localScale = pivotScale * targetScale;
+		transform.localScale = pivotScale;
 
 		ChangeState(state.Idle);
 	}
