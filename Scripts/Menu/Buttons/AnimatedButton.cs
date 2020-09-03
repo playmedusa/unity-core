@@ -37,7 +37,7 @@ public class AnimatedButton : Selectable, IPointerClickHandler
 
 	float deselectTime;
 
-	void Reset()
+	new void Reset()
 	{
 		transition = Transition.None;
 	}
