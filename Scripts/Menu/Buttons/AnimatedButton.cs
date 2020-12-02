@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class AnimatedButton : Selectable, IPointerClickHandler
+public class AnimatedButton : Selectable, IPointerClickHandler, ISubmitHandler
 {
 	public bool ignoreStateView;
 	public UnityEvent OnClick;
@@ -170,4 +170,8 @@ public class AnimatedButton : Selectable, IPointerClickHandler
 			OnClick.Invoke();
 	}
 
+	public void OnSubmit(BaseEventData eventData)
+	{
+		OnPointerClick(null);
+	}
 }

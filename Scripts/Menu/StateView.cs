@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class StateView : FSM<StateView.state>
 {
@@ -76,6 +77,8 @@ public class StateView : FSM<StateView.state>
 
 		ui.anchoredPosition = Vector2.zero;
 		iInitView?.InitView(this);
+		if (rememberPreviouslySelected)
+			EventSystem.current.SetSelectedGameObject(m_PreviouslySelected);
 	}
 
 	void HideCanvas()

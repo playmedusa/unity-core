@@ -217,8 +217,8 @@ public class StateViewManager : FSM<StateViewManager.state>
 			{
 				SelectBestCandidate();
 			}
-			if (Input.GetAxis("Mouse Y") != 0)
-				SetUsingMouse(true);
+/*			if (Input.GetAxis("Mouse Y") != 0)
+			SetUsingMouse(true);*/
 			if (idc != null && idc.raw(Actuator.ForwardAxis) != 0)
 				SetUsingMouse(false);
 			yield return 0;
