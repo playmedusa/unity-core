@@ -23,7 +23,7 @@ public class VisualFX : MonoBehaviour
 	public ParticleSystem ps;
 	public Sprite sprite;
 	public Renderer shaderRenderer;
-	new public Animation animation;
+	public new Animation animation;
 
 	[Header("FX Settings")]
 	public FXType fxType;
@@ -133,7 +133,7 @@ public class VisualFX : MonoBehaviour
 
 	void PlayAnimation()
 	{
-		if (animation != null)
+		if (animation == Animation.None)
 		{
 			//animation.Play();
 		}

@@ -54,7 +54,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 	InputDeviceComponent idc;
 	UnityAction onNextViewOpen;
 
-	void OnRectTransformDimensionsChange()
+	protected void OnRectTransformDimensionsChange()
 	{
 		ScreenOrientation orientation = Screen.width > Screen.height ? ScreenOrientation.Landscape : ScreenOrientation.Portrait;
 
@@ -217,8 +217,8 @@ public class StateViewManager : FSM<StateViewManager.state>
 			{
 				SelectBestCandidate();
 			}
-/*			if (Input.GetAxis("Mouse Y") != 0)
-			SetUsingMouse(true);*/
+			/*if (Input.GetAxis("Mouse Y") != 0)
+				SetUsingMouse(true);*/
 			if (idc != null && idc.raw(Actuator.ForwardAxis) != 0)
 				SetUsingMouse(false);
 			yield return 0;
@@ -269,6 +269,8 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 	private void SetSelected(GameObject go)
 	{
+		EventSystem.current.SetSelectedGameObject(go);
+		/*
 		//if (EventSystem.current == null)
 		//return;
 		//Select the GameObject.
@@ -283,6 +285,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 		//But if the user switches to the keyboard, we want to start the navigation from the provided game object.
 		//So here we set the current Selected to null, so the provided gameObject becomes the Last Selected in the EventSystem.
 		EventSystem.current.SetSelectedGameObject(null);
+		*/
 	}
 
 	static GameObject FindFirstEnabledSelectable(GameObject gameObject)

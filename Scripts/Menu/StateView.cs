@@ -46,6 +46,7 @@ public class StateView : FSM<StateView.state>
 		get;
 		protected set;
 	}
+	
 	bool viewReady;
 
 	void OnValidate()
@@ -132,13 +133,16 @@ public class StateView : FSM<StateView.state>
 
 	IEnumerator execute()
 	{
+		viewReady = true;
 		while (currentState == state.execute)
 		{
-			viewReady = true;
 			if (iExecuteView != null)
 				yield return StartCoroutine(iExecuteView.Execute());
 			else
+			{
+				StopFSM();
 				yield break;
+			}
 		}
 	}
 
