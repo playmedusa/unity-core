@@ -3,10 +3,11 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
-
+	
 	private static SceneLoader _instance;
 	public static SceneLoader instance
 	{
@@ -30,7 +31,8 @@ public class SceneLoader : MonoBehaviour
 	public float fadeInDelay;
 	public float defaultFadeTime = 0.5f;
 	public UnityEvent onTimeOut;
-
+	public Text loadingText;
+	public bool showLoadingTextOnFadeIn;
 	void Awake()
 	{
 		fadeCanvasGroup = GetComponent<CanvasGroup>();
@@ -61,6 +63,8 @@ public class SceneLoader : MonoBehaviour
 
 	public void FadeIn()
 	{
+		if (loadingText != null && showLoadingTextOnFadeIn == false)
+			loadingText.gameObject.SetActive(false);
 		StartCoroutine(FadeIn(defaultFadeTime));
 	}
 
@@ -77,6 +81,8 @@ public class SceneLoader : MonoBehaviour
 	IEnumerator FadeOutAndLoad(string sceneName, float animationTime, float waitTime, Action callback = null)
 	{
 		fadeCanvasGroup.alpha = 0;
+		if (loadingText != null)
+			loadingText.gameObject.SetActive(true);
 		yield return this.DoUnscaledTween01(t =>
 		{
 			if (music != null)
