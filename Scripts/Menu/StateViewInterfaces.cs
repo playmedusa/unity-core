@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 public interface IInitView
 {
@@ -15,7 +13,7 @@ public interface IExecuteView
 
 public interface ISetupView
 {
-	Task SetupView();
+	UniTask SetupView();
 }
 
 public interface IOpenView

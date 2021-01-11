@@ -106,7 +106,7 @@ public class StateView : FSM<StateView.state>
 	IEnumerator open()
 	{
 		if (iSetupView != null)
-			yield return iSetupView.SetupView().AsIEnumerator();
+			yield return iSetupView.SetupView();
 		transform.SetAsLastSibling();
 		if (canvasGroup != null)
 		{

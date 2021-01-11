@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Mgl;
 using TMPro;
@@ -106,10 +106,10 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showMessage);
 	}
 
-	public async Task ShowMessageAsync(string title, string message)
+	public async UniTask ShowMessageAsync(string title, string message)
 	{
 		ShowMessage(title, message);
-		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showMessage);
+		await UniTask.WaitUntil(() => fsm.currentState != states.showMessage);
 	}
 
 	public void ShowError(string message, Action callback = null)
@@ -120,10 +120,10 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showMessage);
 	}
 	
-	public async Task ShowErrorAsync(string message)
+	public async UniTask ShowErrorAsync(string message)
 	{
 		ShowError(message);
-		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showMessage);
+		await UniTask.WaitUntil(() => fsm.currentState != states.showMessage);
 	}
 
 	public void ShowChoose(string title, string message, Action yesCallback = null, Action noCallback = null)
@@ -135,11 +135,11 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showChoose);
 	}
 	
-	public async Task<bool> ShowChooseAsync(string title, string message)
+	public async UniTask<bool> ShowChooseAsync(string title, string message)
 	{
 		bool accepted = false;
 		ShowChoose(title, message, () => { accepted = true;});
-		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showChoose);
+		await UniTask.WaitUntil(() => fsm.currentState != states.showChoose);
 		return accepted;
 	}
 
@@ -153,7 +153,7 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showInput);
 	}
 	
-	public async Task<string> ShowInputAsync(string title, string description, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
+	public async UniTask<string> ShowInputAsync(string title, string description, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
 	{
 		var response = "";
 		okInputCallback = s =>
@@ -165,7 +165,7 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		inputField.text = "";
 		inputField.contentType = contentType;
 		fsm.ChangeState(states.showInput);
-		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showInput);
+		await UniTask.WaitUntil(() => fsm.currentState != states.showInput);
 		return response;
 	}
 
