@@ -33,7 +33,7 @@ public class GameVersionHelper {
 	public void Init () {
 		string filePath = Path.Combine(Application.streamingAssetsPath, fileName);
 
-		#if UNITY_ANDROID
+		#if UNITY_ANDROID && ! UNITY_EDITOR
 		WWW reader = new WWW(filePath);
 		while (!reader.isDone) { }
 		if (string.IsNullOrEmpty(reader.error)) {
