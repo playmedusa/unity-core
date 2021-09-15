@@ -2,19 +2,19 @@
 using UnityEngine.Events;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using InputMapper;
 
 public class InputDeviceSystem : MonoBehaviour
 {
 
-	public InputDeviceComponent idc;
-	public string replayFile;
-	public bool showMouseCursorDefault;
-	public UnityAction OnStartReplay;
-	bool replaying;
-	public static float replayDeltaTime = 0;
+    public InputDeviceComponent idc;
+    public string replayFile;
+    public bool showMouseCursorDefault;
+    public UnityAction OnStartReplay;
+    bool replaying;
+    public static float replayDeltaTime = 0;
 
+#if ENABLE_LEGACY_INPUT_MANAGER
 	void Awake()
 	{
 		if (replayFile != "")
@@ -233,5 +233,5 @@ public class InputDeviceSystem : MonoBehaviour
 			idc.TriggerActuator(actuator);
 		}
 	}
-
+#endif
 }
