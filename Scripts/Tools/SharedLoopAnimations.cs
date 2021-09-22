@@ -18,7 +18,7 @@ public class SharedLoopAnimations : MonoBehaviour {
 	}
 	public AvailableAnimations itemAnimation;
 
-	void OnEnable () {
+	void Start () {
 		StartCoroutine (Animation ());
 	}
 	
