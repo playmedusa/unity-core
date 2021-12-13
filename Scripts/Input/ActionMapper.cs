@@ -14,12 +14,12 @@ public class ActionMapper: MonoBehaviour
 
     private void Awake()
     {
-        InputUser.onChange += InputUserOnChange;
+        // InputUser.onChange += InputUserOnChange;
     }
 
     private void OnDestroy()
     {
-        InputUser.onChange -= InputUserOnChange;
+        // InputUser.onChange -= InputUserOnChange;
         if (user.valid)
             DisableCurrentSchema(actionCollection);
     }

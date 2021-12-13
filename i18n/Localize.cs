@@ -33,6 +33,14 @@ public partial class Localize : MonoBehaviour
 		{
 
 			LocalizeTextLabel();
+			I18n.instance.OnLanguageChanged += LocalizeTextLabel;
+		}
+	}
+
+	void OnDestroy() {
+		if (textLabel != null)
+		{
+			I18n.instance.OnLanguageChanged += LocalizeTextLabel;
 		}
 	}
 

@@ -20,6 +20,9 @@ namespace Mgl
 		private string _localePath = "Locales/";
 		private bool _isLoggingMissing = true;
 
+		public delegate void LanguageChanged();
+	    public event LanguageChanged OnLanguageChanged;
+
 		override protected void Init()
 		{
 			InitCurrentLocale();
@@ -79,6 +82,7 @@ namespace Mgl
 		{
 			instance.Configure(newLocale: newLocale);
 			localeId = Array.FindIndex(instance.locales, w => w == instance._currentLocale);
+			instance.OnLanguageChanged?.Invoke();
 		}
 
 		public static void SetPath(string localePath = null)

@@ -4,6 +4,12 @@ using System;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using System;
+using System.Collections;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
