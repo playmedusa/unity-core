@@ -1,7 +1,5 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
 using System.IO;
+using UnityEngine;
 
 public class GameVersion {
 	

@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(AnimatedButton))]
 public abstract class ButtonAnimation : FSM<ButtonAnimation.state>, IAnimatedButton

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System;
-using System.Collections;
-using InputMapper;
+using UnityEngine.UI;
 
 public class StateViewManager : FSM<StateViewManager.state>
 {
@@ -50,8 +49,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 		get;
 		private set;
 	}
-
-	InputDeviceComponent idc;
+	
 	UnityAction onNextViewOpen;
 
 	protected void OnRectTransformDimensionsChange()
@@ -74,18 +72,12 @@ public class StateViewManager : FSM<StateViewManager.state>
 	void Start()
 	{
 		OnRectTransformDimensionsChange();
-		idc = FindObjectOfType<InputDeviceComponent>();
 		if (initialyOpen != null)
 			ShowStateView(initialyOpen);
 	}
 
 	void Update()
 	{
-		if (idc != null)
-			SetUsingMouse(idc.currentDevice.inputDevice == InputDevice.Keyboard);
-		else
-			isUsingMouse = true;
-
 		if (isUsingMouse)
 		{
 			if (currentView != null)
@@ -214,13 +206,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 			if (currentView == null) yield break;
 
 			if (EventSystem.current.currentSelectedGameObject == null)
-			{
 				SelectBestCandidate();
-			}
-			/*if (Input.GetAxis("Mouse Y") != 0)
-				SetUsingMouse(true);*/
-			if (idc != null && idc.raw(Actuator.ForwardAxis) != 0)
-				SetUsingMouse(false);
 			yield return 0;
 		}
 	}

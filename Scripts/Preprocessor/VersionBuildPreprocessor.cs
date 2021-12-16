@@ -1,9 +1,9 @@
 ﻿#if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-using System.IO;
 
 public class VersionBuildPreprocessor : IPreprocessBuildWithReport
 {
@@ -30,8 +30,10 @@ public class VersionBuildPreprocessor : IPreprocessBuildWithReport
 
 		GameVersion gameVersion = new GameVersion(PlayerSettings.bundleVersion, bundle);
 		string dataAsJson = JsonUtility.ToJson(gameVersion);
-
+		
 		string filePath = Application.dataPath + versionPath;
+		if (!Directory.Exists(filePath))
+			Directory.CreateDirectory(filePath);
 		File.WriteAllText(filePath, dataAsJson);
 	}
 

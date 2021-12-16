@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.EventSystems;
+using UnityEngine;
+
 public class PressButtonAnimation : ButtonAnimation
 {
 	public float scaleFactor = 0.1f;

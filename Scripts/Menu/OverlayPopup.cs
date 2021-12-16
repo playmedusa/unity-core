@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
-using UnityEngine;
 using Mgl;
 using TMPro;
+using UnityEngine;
 
 public class OverlayPopup : Singleton<OverlayPopup>
 {

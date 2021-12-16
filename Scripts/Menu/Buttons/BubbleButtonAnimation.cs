@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.EventSystems;
+using UnityEngine;
+
 public class BubbleButtonAnimation : ButtonAnimation
 {
 

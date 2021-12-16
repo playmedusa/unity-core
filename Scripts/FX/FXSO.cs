@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.Audio;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.Audio;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/FX")]
 public class FXSO : ScriptableObject
@@ -9,7 +9,7 @@ public class FXSO : ScriptableObject
 	public GameObject[] visualFX;
 	public int poolSize = 0;
 
-	[System.NonSerialized]
+	[NonSerialized]
 	int lastSfxIndex = -1;
 
 	public AudioClip sfx
