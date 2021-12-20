@@ -54,13 +54,13 @@ public class StateViewManager : FSM<StateViewManager.state>
 
 	protected void OnRectTransformDimensionsChange()
 	{
-		ScreenOrientation orientation = Screen.width > Screen.height ? ScreenOrientation.Landscape : ScreenOrientation.Portrait;
+		ScreenOrientation orientation = Screen.width > Screen.height ? ScreenOrientation.LandscapeLeft : ScreenOrientation.Portrait;
 
 		switch (Screen.orientation)
 		{
 			case ScreenOrientation.LandscapeLeft:
 			case ScreenOrientation.LandscapeRight:
-				OnOrientationChange?.Invoke(ScreenOrientation.Landscape);
+				OnOrientationChange?.Invoke(ScreenOrientation.LandscapeLeft);
 				break;
 			case ScreenOrientation.Portrait:
 			case ScreenOrientation.PortraitUpsideDown:

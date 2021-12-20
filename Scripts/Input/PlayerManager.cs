@@ -58,7 +58,7 @@ public class PlayerManager : MonoBehaviour
         players.Remove(this);
     }
 
-    public void SetInputSystemUI(InputSystemUIInputModule uiInputModule)
+    public void SetupInputSystemUI(InputSystemUIInputModule uiInputModule)
     {
         _playerInput.uiInputModule = uiInputModule;
     }
@@ -79,8 +79,21 @@ public class PlayerManager : MonoBehaviour
             {
                 InputUser.PerformPairingWithDevice(device, _playerInput.user);
             }
-        } else
+        }
+        else
+        {
             _playerInput.actions = asset;
+        }
+
+        if (_playerInput.uiInputModule != null)
+        {
+            _playerInput.uiInputModule.actionsAsset = _playerInput.actions;
+            _playerInput.uiInputModule.actionsAsset.devices = _playerInput.devices;
+
+            //This shouldn't be needed, BUT: https://forum.unity.com/threads/input-system-1-2-0-breaks-multiplayer-ui-navigation-weird-fix-inside.1210365/
+            _playerInput.uiInputModule.enabled = false;
+            _playerInput.uiInputModule.enabled = true;
+        }
 
         _playerInput.neverAutoSwitchControlSchemes = _playerInput.playerIndex > 0 || !allowP0AutoSwitch;
     }
