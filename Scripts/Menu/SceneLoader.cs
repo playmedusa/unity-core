@@ -1,14 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using System;
+﻿using System;
 using System.Collections;
-using UnityEngine.Events;
-using UnityEngine.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System;
-using System.Collections;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
@@ -23,7 +17,7 @@ public class SceneLoader : MonoBehaviour
 				_instance = FindObjectOfType<SceneLoader>();
 			if (_instance == null)
 			{
-				GameObject go = GameObject.Instantiate(Resources.Load("SceneLoader") as GameObject);
+				GameObject go = Instantiate(Resources.Load("SceneLoader") as GameObject);
 				go.name = "SceneLoader";
 				_instance = go.GetComponent<SceneLoader>();
 			}

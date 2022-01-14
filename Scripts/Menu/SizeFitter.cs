@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SizeFitter : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class SizeFitter : MonoBehaviour
 	void Update()
 	{
 		#if ENABLE_INPUT_SYSTEM
-		if (UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame)
+		if (Keyboard.current.spaceKey.wasPressedThisFrame)
 		#else
 		if (Input.GetKeyDown(KeyCode.Space))
 		#endif

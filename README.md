@@ -30,11 +30,10 @@ Note: This repo requires Scripting Runtime Version set to .NET 4.x in Unity Play
 # Events
 
 # Input
-It's build of two base componentes: The InputSystem and the InputDeviceComponent.
-## System
-## IDC
-## Scriptables
-## Recording
+The input scripts are built on top of the Unity new Input System v1.2.0, so reading the official https://docs.unity3d.com/Packages/com.unity.inputsystem@1.2/manual/index.html is recommended to understand how to setup the InputSystem.
+
+In this repo we can find a few prefabs and scripts to help us creating player controller allowing us to change scenes, bind or switch action maps and subscribe to all callbacks using C# code without losing PlayerInput's initialization (devices).
+Checkout the ```LobbyManager``` and ```PlayerManager``` prefabs to setup quickly a "configuration menu scene". There are also a few scripts and prefabs under the ```InputSample``` folder as reference for setting up a multiplayer menu ui and a player controller switching (while turning on/off the schemes) to switch between "game" and "ui" controls.
 
 # Menu
 The menu system includes Menu states and UI view handlind and supports custom animated buttons.
@@ -73,6 +72,8 @@ This ```StateView``` can be set up in the ```StateViewManager```. This view will
 
 # Tweening
 
+Imported from https://gist.github.com/xanathar/735e17ac129a72a277ee
+
 # Other tools
 ## Extensions
 #### InstanceFromPool
@@ -83,6 +84,15 @@ It will create a poll for that gameObject with the desired length (if it doesn't
 From any given weights float array, launches a roulette and returns the winner's index.
 
 #### TaskExtensions
+
+Handy ```WaitWhile``` and ```WaitUntil``` extension methods included. e.g:
+```
+public async Task ShowMessageAsync(string title, string message)
+{
+	ShowMessage(title, message);
+	await TaskExtensions.WaitUntil(() => fsm.currentState != states.showMessage);
+}
+```
 
 ## Object pooling
 ## FSM

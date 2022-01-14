@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.EventSystems;
+
 public class TintButtonAnimation : ButtonAnimation
 {
 

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System;
-using System.Collections;
-using InputMapper;
+using UnityEngine.UI;
 
 public class StateViewManager : FSM<StateViewManager.state>
 {
@@ -50,19 +49,18 @@ public class StateViewManager : FSM<StateViewManager.state>
 		get;
 		private set;
 	}
-
-	InputDeviceComponent idc;
+	
 	UnityAction onNextViewOpen;
 
 	protected void OnRectTransformDimensionsChange()
 	{
-		ScreenOrientation orientation = Screen.width > Screen.height ? ScreenOrientation.Landscape : ScreenOrientation.Portrait;
+		ScreenOrientation orientation = Screen.width > Screen.height ? ScreenOrientation.LandscapeLeft : ScreenOrientation.Portrait;
 
 		switch (Screen.orientation)
 		{
 			case ScreenOrientation.LandscapeLeft:
 			case ScreenOrientation.LandscapeRight:
-				OnOrientationChange?.Invoke(ScreenOrientation.Landscape);
+				OnOrientationChange?.Invoke(ScreenOrientation.LandscapeLeft);
 				break;
 			case ScreenOrientation.Portrait:
 			case ScreenOrientation.PortraitUpsideDown:
@@ -74,18 +72,12 @@ public class StateViewManager : FSM<StateViewManager.state>
 	void Start()
 	{
 		OnRectTransformDimensionsChange();
-		idc = FindObjectOfType<InputDeviceComponent>();
 		if (initialyOpen != null)
 			ShowStateView(initialyOpen);
 	}
 
 	void Update()
 	{
-		if (idc != null)
-			SetUsingMouse(idc.currentDevice.inputDevice == InputDevice.Keyboard);
-		else
-			isUsingMouse = true;
-
 		if (isUsingMouse)
 		{
 			if (currentView != null)
@@ -214,13 +206,7 @@ public class StateViewManager : FSM<StateViewManager.state>
 			if (currentView == null) yield break;
 
 			if (EventSystem.current.currentSelectedGameObject == null)
-			{
 				SelectBestCandidate();
-			}
-			/*if (Input.GetAxis("Mouse Y") != 0)
-				SetUsingMouse(true);*/
-			if (idc != null && idc.raw(Actuator.ForwardAxis) != 0)
-				SetUsingMouse(false);
 			yield return 0;
 		}
 	}
