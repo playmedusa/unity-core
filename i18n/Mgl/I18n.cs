@@ -65,7 +65,10 @@ namespace Mgl
 				Debug.Log("Loading locale " + localConfigPath);
 #endif
 				TextAsset configText = Resources.Load(localConfigPath) as TextAsset;
-				translationData = JSON.Parse(configText.text);
+				if (configText != null)
+				{
+					translationData = JSON.Parse(configText.text);
+				}
 			}
 			else if (_isLoggingMissing)
 			{
