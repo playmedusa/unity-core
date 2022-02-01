@@ -1,3 +1,4 @@
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
 
@@ -37,3 +38,4 @@ public class PlayerUI : MonoBehaviour
             playerManager.SetupInputSystemUI(null);
     }
 }
+#endif

@@ -37,6 +37,8 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	public RectTransform choosePopup;
 	public TextMeshProUGUI chooseTitle;
 	public TextMeshProUGUI chooseBody;
+	public TextMeshProUGUI yesText;
+	public TextMeshProUGUI noText;
 	Action yesCallback = null;
 	Action noCallback = null;
 
@@ -133,6 +135,13 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		chooseTitle.text = I18n.T(title);
 		chooseBody.text = I18n.T(message);
 		fsm.ChangeState(states.showChoose);
+	}
+	
+	public void ShowChoose(string title, string message, string yesText, string noText, Action yesCallback = null, Action noCallback = null)
+	{
+		ShowChoose(title, message, yesCallback, noCallback);
+		this.yesText.text = yesText;
+		this.noText.text = noText;
 	}
 	
 	public async Task<bool> ShowChooseAsync(string title, string message)

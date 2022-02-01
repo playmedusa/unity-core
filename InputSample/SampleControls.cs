@@ -8,7 +8,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
+#if ENABLE_INPUT_SYSTEM
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -960,3 +960,4 @@ public partial class @SampleControls : IInputActionCollection2, IDisposable
         void OnSubmit(InputAction.CallbackContext context);
     }
 }
+#endif

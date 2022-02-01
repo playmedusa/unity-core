@@ -1,3 +1,4 @@
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -42,3 +43,4 @@ public class PlayerController : MonoBehaviour, SampleControls.IAvatarActions
     }
 
 }
+#endif

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
@@ -196,3 +196,4 @@ public class PlayerManager : MonoBehaviour
     }
     
 }
+#endif
