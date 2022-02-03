@@ -23,6 +23,12 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	public RectTransform canvasRT;
 	public CanvasGroup background;
 
+	[Header("Popup settings")]
+	public float bounceInFactor = 1.7f;
+	public float showViewTime = 0.75f;
+	public float bounceOutFactor = 1.7f;
+	public float hideViewTime = 0.5f;
+
 	[Header("Loading popup")]
 	public RectTransform loadingPopup;
 	public TextMeshProUGUI loadingTitle;
@@ -96,15 +102,15 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	{
 		callback = null;
 		messageBody.text = "";
-		loadingTitle.text = I18n.T("Please wait...");
+		loadingTitle.text = I18n.t("Please wait...");
 		fsm.ChangeState(states.loading);
 	}
 
 	public void ShowMessage(string title, string message, Action callback = null)
 	{
 		this.callback = callback;
-		messageTitle.text = I18n.T(title);
-		messageBody.text = I18n.T(message);
+		messageTitle.text = I18n.t(title);
+		messageBody.text = I18n.t(message);
 		fsm.ChangeState(states.showMessage);
 	}
 
@@ -117,8 +123,8 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	public void ShowError(string message, Action callback = null)
 	{
 		this.callback = callback;
-		messageTitle.text = I18n.T("Oops!");
-		messageBody.text = I18n.T(message);
+		messageTitle.text = I18n.t("Oops!");
+		messageBody.text = I18n.t(message);
 		fsm.ChangeState(states.showMessage);
 	}
 	
@@ -132,8 +138,8 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	{
 		this.yesCallback = yesCallback;
 		this.noCallback = noCallback;
-		chooseTitle.text = I18n.T(title);
-		chooseBody.text = I18n.T(message);
+		chooseTitle.text = I18n.t(title);
+		chooseBody.text = I18n.t(message);
 		fsm.ChangeState(states.showChoose);
 	}
 	
@@ -155,8 +161,8 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	public void ShowInput(string title, string description, Action<string> okInputCallback, TMP_InputField.ContentType contentType = TMP_InputField.ContentType.Standard)
 	{
 		this.okInputCallback = okInputCallback;
-		inputTitle.text = I18n.T(title);
-		inputBody.text = I18n.T(description);
+		inputTitle.text = I18n.t(title);
+		inputBody.text = I18n.t(description);
 		inputField.text = "";
 		inputField.contentType = contentType;
 		fsm.ChangeState(states.showInput);
@@ -169,8 +175,8 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		{
 			response = s;
 		};
-		inputTitle.text = I18n.T(title);
-		inputBody.text = I18n.T(description);
+		inputTitle.text = I18n.t(title);
+		inputBody.text = I18n.t(description);
 		inputField.text = "";
 		inputField.contentType = contentType;
 		fsm.ChangeState(states.showInput);
@@ -209,20 +215,23 @@ public class OverlayPopup : Singleton<OverlayPopup>
 
 	IEnumerator showView(RectTransform holder, states state)
 	{
-		loadingPopup.anchoredPosition = Vector3.down * screenOffset;
-		messagePopup.anchoredPosition = Vector3.down * screenOffset;
-		choosePopup.anchoredPosition = Vector3.down * screenOffset;
+		loadingPopup.anchoredPosition = Vector2.down * screenOffset;
+		messagePopup.anchoredPosition = Vector2.down * screenOffset;
+		choosePopup.anchoredPosition = Vector2.down * screenOffset;
+		inputPopup.anchoredPosition = Vector2.down * screenOffset;
 		Canvas.ForceUpdateCanvases();
+		var canvasGroup = holder.GetComponent<CanvasGroup>();
 
 		yield return this.DoUnscaledTween01(t =>
 		{
-			//loadingPopup.localScale = Vector3.one * PennerAnimation.QuadEaseInOut(t, 0, 1, 1);
 			holder.localPosition = new Vector3(
 				0,
-				PennerAnimation.BackEaseOut(t, -screenOffset, screenOffset, 1),
+				PennerAnimation.BackEaseOut(t, -screenOffset, screenOffset, 1, bounceInFactor),
 				0
 			);
-		}, 0.75f);
+			if (canvasGroup != null)
+				canvasGroup.alpha = t;
+		}, showViewTime);
 
 		background.interactable = true;
 		background.blocksRaycasts = true;
@@ -235,10 +244,12 @@ public class OverlayPopup : Singleton<OverlayPopup>
 			//loadingPopup.localScale = Vector3.one * PennerAnimation.QuadEaseInOut(t, 1, -1, 1);
 			holder.localPosition = new Vector3(
 				0,
-				PennerAnimation.BackEaseIn(t, 0, screenOffset, 1),
+				PennerAnimation.BackEaseIn(t, 0, screenOffset, 1, bounceOutFactor),
 				0
 			);
-		}, 0.5f);
+			if (canvasGroup != null)
+				canvasGroup.alpha = 1 - t;
+		}, hideViewTime);
 	}
 
 	IEnumerator loading()
