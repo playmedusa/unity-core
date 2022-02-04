@@ -10,30 +10,13 @@ public class AnimatedButton : Selectable, IPointerClickHandler, ISubmitHandler
 	ButtonAnimation buttonAnimation;
 	StateView stateView;
 
-	private bool isStateViewReady
-	{
-		get
-		{
-			return (stateView != null && stateView.isReady) || stateView == null || ignoreStateView;
-		}
-	}
+	private bool isStateViewReady => (stateView != null && stateView.isReady) || stateView == null || ignoreStateView;
 
-	public ButtonAnimation.state animationState
-	{
-		get
-		{
-			return buttonAnimation.currentState;
-		}
-	}
+	public ButtonAnimation.state animationState => buttonAnimation.currentState;
 
-	public bool isClickable
-	{
-		get
-		{
-			return animationState != ButtonAnimation.state.Disabled &&
-				animationState != ButtonAnimation.state.Click;
-		}
-	}
+	public bool isClickable =>
+		animationState != ButtonAnimation.state.Disabled &&
+		animationState != ButtonAnimation.state.Click && interactable;
 
 	float deselectTime;
 
@@ -104,7 +87,7 @@ public class AnimatedButton : Selectable, IPointerClickHandler, ISubmitHandler
 	override public void OnPointerDown(PointerEventData eventData)
 	{
 		base.OnPointerDown(eventData);
-		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+		if (!isClickable)
 			return;
 
 		if (isStateViewReady)
@@ -113,7 +96,7 @@ public class AnimatedButton : Selectable, IPointerClickHandler, ISubmitHandler
 
 	virtual public void OnPointerClick(PointerEventData eventData)
 	{
-		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+		if (!isClickable)
 			return;
 
 		if (isStateViewReady)
@@ -140,7 +123,7 @@ public class AnimatedButton : Selectable, IPointerClickHandler, ISubmitHandler
 
 	override public void OnDeselect(BaseEventData eventData)
 	{
-		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+		if (!isClickable)
 			return;
 		base.OnDeselect(eventData);
 		deselectTime = Time.time;
@@ -148,7 +131,7 @@ public class AnimatedButton : Selectable, IPointerClickHandler, ISubmitHandler
 
 	override public void OnPointerUp(PointerEventData eventData)
 	{
-		if (buttonAnimation.currentState == ButtonAnimation.state.Disabled || buttonAnimation.currentState == ButtonAnimation.state.Click)
+		if (!isClickable)
 			return;
 
 		base.OnPointerUp(eventData);
