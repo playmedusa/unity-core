@@ -8,6 +8,7 @@ public class StateView : FSM<StateView.state>
 
 	public enum state
 	{
+		_,
 		open,
 		execute,
 		close,
@@ -17,16 +18,16 @@ public class StateView : FSM<StateView.state>
 	[Header("Cached references")]
 	public RectTransform ui;
 	public StateViewManager svm;
+	public SafeArea safeArea;
 
 	[Header("StateView config")]
 	public bool hideOnAwake = true;
 	public bool showStatic;
 	public bool rememberPreviouslySelected;
 	public bool showMouse = true;
-	public bool showCursor;
 	public bool skipAutoselect;
+	public bool ignoreSafeArea;
 	public GameObject m_PreviouslySelected;
-
 	public float animationTime = 1;
 
 	IInitView iInitView;
@@ -55,6 +56,12 @@ public class StateView : FSM<StateView.state>
 			svm = GetComponentInParent<StateViewManager>();
 		if (ui == null)
 			ui = GetComponent<RectTransform>();
+		if (safeArea == null && ignoreSafeArea)
+		{
+			safeArea = GetComponentInParent<SafeArea>();
+			if (safeArea == null)
+				Debug.LogError("Safe area not found");
+		}
 	}
 
 	public override void ChangeState(state nextState)
@@ -92,8 +99,23 @@ public class StateView : FSM<StateView.state>
 		canvasGroup.blocksRaycasts = false;
 	}
 
+	void IgnoreSafeArea()
+	{
+		if (!ignoreSafeArea || safeArea == null) return;
+		var safeRT = safeArea.transform as RectTransform;
+		var rt = transform as RectTransform;
+		var rect = new Rect(
+			-safeRT.localPosition,
+			new Vector2(Screen.width, Screen.height)
+		);
+		rt.anchorMin = rt.anchorMax = Vector2.one * 0.5f;
+		rt.anchoredPosition = rect.position;
+		rt.sizeDelta = rect.size;
+	}
+	
 	public void Show(UnityAction callback = null)
 	{
+		IgnoreSafeArea();
 		viewReady = false;
 		onViewOpened = callback;
 		ChangeState(state.open);
