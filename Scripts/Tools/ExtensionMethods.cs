@@ -30,6 +30,31 @@ public static class ExtensionMethods
 		return c;
 	}
 
+	public static Texture2D GetScreenshot(this RectTransform rt, Camera camera)
+	{
+		Vector3[] v = new Vector3[4];
+		rt.GetWorldCorners(v);
+		/*for (int i = 0; i < v.Length; i++)
+		{
+			v[i] = camera.WorldToScreenPoint(v[i]);
+			v[i].y -= Screen.height;
+		}*/
+		int startX = (int)v[0].x;
+		int startY = (int)v[0].y;
+		int width = (int)v[3].x - (int)v[0].x;
+		int height = (int)v[1].y - (int)v[0].y;
+		var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+		tex.ReadPixels(new Rect(startX, startY, width, height), 0, 0);
+		tex.Apply();
+		return tex;
+	}
+	
+	public static Sprite GetScreenshotSprite(this RectTransform rt, Camera camera)
+	{
+		var tex = rt.GetScreenshot(camera);
+		return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(.5f, .5f));
+	}
+
 	public static Vector3 ToViewportPointProjected(this Vector3 worldPos, Camera camera)
 	{
 		Vector3 camNormal = camera.transform.forward;
