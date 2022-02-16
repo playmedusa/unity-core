@@ -112,6 +112,19 @@ public class StateView : FSM<StateView.state>
 		rt.anchoredPosition = rect.position;
 		rt.sizeDelta = rect.size;
 	}
+
+	public void IgnoreSafeArea(RectTransform rt)
+	{
+		if (safeArea == null) return;
+		var safeRT = safeArea.transform as RectTransform;
+		var rect = new Rect(
+			-safeRT.localPosition,
+			new Vector2(Screen.width, Screen.height)
+		);
+		rt.anchorMin = rt.anchorMax = Vector2.one * 0.5f;
+		rt.anchoredPosition = rect.position;
+		rt.sizeDelta = rect.size;
+	}
 	
 	public void Show(UnityAction callback = null)
 	{
@@ -130,9 +143,9 @@ public class StateView : FSM<StateView.state>
 
 	IEnumerator open()
 	{
+		transform.SetAsLastSibling();
 		if (iSetupView != null)
 			yield return iSetupView.SetupView().AsIEnumerator();
-		transform.SetAsLastSibling();
 		if (canvasGroup != null)
 		{
 			canvasGroup.interactable = true;
