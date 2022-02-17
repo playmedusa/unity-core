@@ -49,10 +49,13 @@ public static class ExtensionMethods
 		return tex;
 	}
 	
-	public static Sprite GetScreenshotSprite(this RectTransform rt, Camera camera)
+	public static Sprite ToSprite(this Texture2D texture)
 	{
-		var tex = rt.GetScreenshot(camera);
-		return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(.5f, .5f));
+		return Sprite.Create(
+			texture, 
+			new Rect(0, 0, texture.width, texture.height), 
+			new Vector2(.5f, .5f)
+		);
 	}
 
 	public static Vector3 ToViewportPointProjected(this Vector3 worldPos, Camera camera)
