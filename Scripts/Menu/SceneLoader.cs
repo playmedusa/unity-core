@@ -5,9 +5,26 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SceneLoader : Singleton<SceneLoader>
+public class SceneLoader : MonoBehaviour
 {
 	
+	private static SceneLoader _instance;
+	public static SceneLoader instance
+	{
+		get
+		{
+			if (_instance == null)
+				_instance = FindObjectOfType<SceneLoader>();
+			if (_instance == null)
+			{
+				GameObject go = Instantiate(Resources.Load("SceneLoader") as GameObject);
+				go.name = "SceneLoader";
+				_instance = go.GetComponent<SceneLoader>();
+			}
+			return _instance;
+		}
+	}
+
 	CanvasGroup fadeCanvasGroup;
 	public AudioSource music;
 	public float timeOut;
@@ -16,7 +33,6 @@ public class SceneLoader : Singleton<SceneLoader>
 	public UnityEvent onTimeOut;
 	public Text loadingText;
 	public bool showLoadingTextOnFadeIn;
-	
 	void Awake()
 	{
 		fadeCanvasGroup = GetComponent<CanvasGroup>();
