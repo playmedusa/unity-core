@@ -140,6 +140,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -148,12 +150,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -171,9 +173,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -1044,6 +1049,46 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      grey_button08.png: 5890661502907979829
+      grey_button15.png: 8586168398677971142
+      grey_button10.png: -4293915247935629726
+      grey_sliderLeft.png: -8440649942238548290
+      grey_button11.png: -7548694591077912297
+      grey_sliderUp.png: 6651496337401139037
+      grey_arrowUpWhite.png: -1990687511945697134
+      grey_sliderEnd.png: 5638699766068244863
+      grey_button06.png: -4020377112360516712
+      grey_sliderVertical.png: 3216906622253031133
+      grey_boxCross.png: 5780194364656661230
+      grey_tickWhite.png: -8608847165373912398
+      grey_crossWhite.png: 8517964494106879923
+      grey_button03.png: -5030259415169956196
+      grey_arrowUpGrey.png: 8776154925792021725
+      grey_button04.png: 5691767691959823166
+      grey_panel.png: 8215518951599258611
+      grey_circle.png: 7867821119060671223
+      grey_box.png: 8150896479600237540
+      grey_checkmarkWhite.png: -6322396266121741612
+      grey_sliderHorizontal.png: -6086515195749109074
+      grey_button12.png: -4514635221769861697
+      grey_tickGrey.png: 6235557505112804585
+      grey_checkmarkGrey.png: 2317427733393623075
+      grey_button13.png: -3244089793890354390
+      grey_button07.png: 1399967191650365304
+      grey_button09.png: -5339687759002196245
+      grey_arrowDownWhite.png: 1434971967687782385
+      grey_boxCheckmark.png: -6927705411857556000
+      grey_crossGrey.png: 2559627872140483328
+      grey_arrowDownGrey.png: 6657530523768784233
+      grey_boxTick.png: 126640697421216760
+      grey_button02.png: -5311964399296168165
+      grey_button00.png: -2083185605815935227
+      grey_button05.png: -8398797729420722155
+      grey_sliderDown.png: -7139040340637831221
+      grey_sliderRight.png: -8444528555425319084
+      grey_button14.png: 5959427623864856799
+      grey_button01.png: 5790118909772803553
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

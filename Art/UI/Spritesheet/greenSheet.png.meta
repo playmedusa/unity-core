@@ -101,6 +101,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -109,12 +111,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -132,9 +134,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -732,6 +737,33 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      green_tick.png: 5339084418436981722
+      green_button01.png: -1035091014369461077
+      green_button09.png: 8577215860921367280
+      green_boxCheckmark.png: 1239746313448357702
+      green_button05.png: 3283642672884559879
+      green_button06.png: 4028348364817660279
+      green_cross.png: -5101664813922658622
+      green_sliderRight.png: 2881265715346704590
+      green_boxCross.png: 6145600918737525994
+      green_button03.png: 3156946200195356939
+      green_panel.png: 4459926641872306954
+      green_boxTick.png: 1625404036388590890
+      green_button07.png: -1199771607246604549
+      green_button08.png: -8089064005508303423
+      green_button04.png: -8482839419177708045
+      green_sliderLeft.png: -8769130691371735986
+      green_button11.png: -1343422513622490232
+      green_sliderUp.png: 961553715083358374
+      green_button12.png: -1083130767418919692
+      green_checkmark.png: 46736326304394286
+      green_button10.png: -2361030520314085257
+      green_button13.png: -5211809728042014551
+      green_circle.png: 7147794344619198804
+      green_button00.png: -8435879851048217447
+      green_button02.png: -4816054178228637408
+      green_sliderDown.png: 6692980074708130292
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

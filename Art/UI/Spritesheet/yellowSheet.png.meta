@@ -101,6 +101,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -109,12 +111,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -132,9 +134,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -732,6 +737,33 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      yellow_button06.png: -3344425462602291751
+      yellow_button11.png: -2136448641980312711
+      yellow_sliderLeft.png: 5120465598417701818
+      yellow_button04.png: -2149242184036582144
+      yellow_button13.png: 853279203557141888
+      yellow_button00.png: 5814376766079533802
+      yellow_button02.png: 7767326687308980389
+      yellow_button08.png: -1983641368012750846
+      yellow_button12.png: -8016074258897202226
+      yellow_boxCheckmark.png: 6761729509836815841
+      yellow_checkmark.png: -5843417856478602854
+      yellow_button10.png: 6378381303847949435
+      yellow_panel.png: -4047706529034126922
+      yellow_button07.png: 3135488737923706463
+      yellow_tick.png: 1163139638889950466
+      yellow_cross.png: 5610655066111874568
+      yellow_button01.png: 3344463464971495344
+      yellow_button09.png: -4436384319054081823
+      yellow_circle.png: 2302456594272668317
+      yellow_button05.png: 780273019539706389
+      yellow_boxCross.png: -8145396759820418397
+      yellow_button03.png: 2818965935814918426
+      yellow_sliderDown.png: 8567766518096636109
+      yellow_sliderRight.png: -3937539800390587196
+      yellow_sliderUp.png: 6843737622342559672
+      yellow_boxTick.png: 1156367319520548069
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

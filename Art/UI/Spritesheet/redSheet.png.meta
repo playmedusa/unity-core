@@ -101,6 +101,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -109,12 +111,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -132,9 +134,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -732,6 +737,33 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      red_tick.png: 8774591959596870239
+      red_boxCheckmark.png: -8832726758384664299
+      red_sliderRight.png: 1675465466657887140
+      red_button02.png: 5257060014878955871
+      red_button09.png: -4013848089071190328
+      red_sliderDown.png: -8232171908964898601
+      red_button01.png: 3020830003382773308
+      red_cross.png: -5040312745238878924
+      red_sliderUp.png: 464322285427591679
+      red_button07.png: -4484651885656313150
+      red_button12.png: 3784500380141927816
+      red_boxTick.png: 1384211309560428976
+      red_button03.png: -6187896202687311619
+      red_circle.png: 3391855900996980014
+      red_button06.png: 1925786905347785580
+      red_button00.png: -9115328484344901752
+      red_sliderLeft.png: -2516194867177082699
+      red_button08.png: 839323276257307277
+      red_button11.png: 801787420030530169
+      red_boxCross.png: 4750974160520624408
+      red_button04.png: -359524069292425417
+      red_button13.png: 5133865164621856165
+      red_checkmark.png: 4311468871560557759
+      red_button05.png: 792950876709444583
+      red_button10.png: 6593294542952575688
+      red_panel.png: -1292364208104684401
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -101,6 +101,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -110,11 +112,11 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 1
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -132,9 +134,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -732,6 +737,33 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      blue_button13.png: -571734535538798343
+      blue_button05.png: 2273862516554000364
+      blue_button08.png: -2135702716234782943
+      blue_circle.png: -956581802588695278
+      blue_sliderUp.png: -9067302685625973426
+      blue_panel.png: 2994987114903804698
+      blue_button12.png: 3552386328965880685
+      blue_button00.png: 1064096351177103804
+      blue_cross.png: -4282427696474775024
+      blue_button11.png: -4590443009793632628
+      blue_button07.png: -3303199041754713762
+      blue_boxTick.png: -8579141585047830663
+      blue_checkmark.png: -7938629432754144731
+      blue_button02.png: -690606466023680430
+      blue_tick.png: 7009732036104962723
+      blue_button09.png: -3769988040058840050
+      blue_boxCross.png: 4407615298912659125
+      blue_button03.png: -9113036846611099526
+      blue_sliderRight.png: 1140000117448135117
+      blue_button10.png: 7285192305131594788
+      blue_button01.png: -1880964660881794156
+      blue_button04.png: -1079764704049017581
+      blue_sliderLeft.png: 4553364362862187114
+      blue_sliderDown.png: -2849257791659735815
+      blue_button06.png: 6794513968505892719
+      blue_boxCheckmark.png: 7344171009905078346
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
