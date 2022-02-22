@@ -78,10 +78,23 @@ public class SharedOneTimeAnimations : MonoBehaviour {
 		}
 		target.alpha = end;
 	}
-
+	
 	public static IEnumerator LinearFade (Image target, float start, float end, float animationTime) {
 		float elapsedTime = 0;
 		Color c = Color.white;
+		while (elapsedTime < animationTime) {
+			c.a = Mathf.Lerp(start, end, elapsedTime/animationTime);
+			target.color = c;
+			elapsedTime += Time.deltaTime;
+			yield return 0;
+		}
+		c.a = end;
+		target.color = c;
+	}
+
+	public static IEnumerator LinearFadeFromTargetColor (Image target, float start, float end, float animationTime) {
+		float elapsedTime = 0;
+		Color c = target.color;
 		while (elapsedTime < animationTime) {
 			c.a = Mathf.Lerp(start, end, elapsedTime/animationTime);
 			target.color = c;
@@ -310,6 +323,18 @@ public class SharedOneTimeAnimations : MonoBehaviour {
             yield return null;
         }
     }
+	
+	public static IEnumerator FadeTextToFullAlpha(TMPro.TextMeshProUGUI text, float animationTime)
+	{
+		var color = text.color;
+		text.color = new Color(color.r, color.g, color.b, 0);
+		while (text.color.a < 1.0f)
+		{
+			color = text.color;
+			text.color = new Color(color.r, color.g, color.b, color.a + (Time.deltaTime / animationTime));
+			yield return null;
+		}
+	}
  
     public static IEnumerator FadeTextToZeroAlpha(Text text, float animationTime)
     {
@@ -322,8 +347,20 @@ public class SharedOneTimeAnimations : MonoBehaviour {
             yield return null;
         }
     }
+    
+    public static IEnumerator FadeTextToZeroAlpha(TMPro.TextMeshProUGUI text, float animationTime)
+    {
+	    var color = text.color;
+	    text.color = new Color(color.r, color.g, color.b, 1);
+	    while (text.color.a > 0.0f)
+	    {
+		    color = text.color;
+		    text.color = new Color(color.r, color.g, color.b, color.a - (Time.deltaTime / animationTime));
+		    yield return null;
+	    }
+    }
 
-		public static IEnumerator TranslateSameSpeed(Transform tr, float randomOffsetMin, float randomOffsetMax, float animationTime, Vector3 from, Vector3 to) {
+	public static IEnumerator TranslateSameSpeed(Transform tr, float randomOffsetMin, float randomOffsetMax, float animationTime, Vector3 from, Vector3 to) {
 		float elapsedTime = 0;
 		while (elapsedTime < animationTime) {
 			tr.position = Vector3.Lerp(from, to, elapsedTime/animationTime);

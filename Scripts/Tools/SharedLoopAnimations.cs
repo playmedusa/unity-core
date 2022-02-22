@@ -14,11 +14,17 @@ public class SharedLoopAnimations : MonoBehaviour {
 		Rock,
 		Hover,
 		Sway,
-		HoverOnZ
+		HoverOnZ,
+		Scale
 	}
 	public AvailableAnimations itemAnimation;
 
 	void Start () {
+		StartCoroutine (Animation ());
+	}
+
+	public void Restart()
+	{
 		StartCoroutine (Animation ());
 	}
 	
@@ -27,6 +33,11 @@ public class SharedLoopAnimations : MonoBehaviour {
 			randomizeOffset = false;
 			offset = Random.value;
 		}
+	}
+
+	public void RandomizeOffset()
+	{
+		offset = Random.value;
 	}
 
 	public IEnumerator Animation () {
@@ -53,6 +64,9 @@ public class SharedLoopAnimations : MonoBehaviour {
 					break;
 				case AvailableAnimations.HoverOnZ:
 					HoverOnZ (t, pivotLocation);
+					break;
+				case AvailableAnimations.Scale:
+					Scale (t, pivotScale);
 					break;
 			}
 			yield return 0;
@@ -98,6 +112,13 @@ public class SharedLoopAnimations : MonoBehaviour {
 		float sz = PennerAnimation.QuadEaseInOut (t, pivotLocation.z, changeInValue, 1);
 		
 		transform.localPosition = new Vector3 (pivotLocation.x, pivotLocation.z, sz);
+	}
+	
+	void Scale (float t, Vector3 pivotScale) {
+		float sx = PennerAnimation.CubicEaseInOut (t, pivotScale.x * 1 - changeInValue, pivotScale.x * changeInValue, 1);
+		float sy = PennerAnimation.CubicEaseInOut (t, pivotScale.y * 1 - changeInValue, pivotScale.y * changeInValue, 1);
+		
+		transform.localScale = new Vector3 (sx, sy, pivotScale.z);
 	}
 
 
