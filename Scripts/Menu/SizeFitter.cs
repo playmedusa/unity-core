@@ -23,6 +23,8 @@ public class SizeFitter : MonoBehaviour
 	public float minXPadding;
 	public float minYPadding;
 
+	public float refAspect = 16f / 9f;
+
 	public bool force;
 
 	void OnValidate()
@@ -66,8 +68,7 @@ public class SizeFitter : MonoBehaviour
 		float minHeight = 0;
 		float unscaledScreenWidth = canvasRectTransform.sizeDelta.x;
 		float unscaledScreenHeight = canvasRectTransform.sizeDelta.y;
-
-		float refAspect = 16f / 9f;
+		
 		float screenAspect = unscaledScreenWidth / unscaledScreenHeight;
 		float scaleFactor = screenAspect / refAspect;
 

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class StateView : FSM<StateView.state>
 {
@@ -101,21 +102,14 @@ public class StateView : FSM<StateView.state>
 
 	void IgnoreSafeArea()
 	{
-		if (!ignoreSafeArea || safeArea == null) return;
-		var safeRT = safeArea.transform as RectTransform;
-		var rt = transform as RectTransform;
-		var rect = new Rect(
-			-safeRT.localPosition,
-			new Vector2(Screen.width, Screen.height)
-		);
-		rt.anchorMin = rt.anchorMax = Vector2.one * 0.5f;
-		rt.anchoredPosition = rect.position;
-		rt.sizeDelta = rect.size;
+		if (!ignoreSafeArea) return;
+		IgnoreSafeArea(transform as RectTransform);
 	}
 
 	public void IgnoreSafeArea(RectTransform rt)
 	{
 		if (safeArea == null) return;
+		var canvasScaler = rt.GetComponentInParent<CanvasScaler>();
 		var safeRT = safeArea.transform as RectTransform;
 		var rect = new Rect(
 			-safeRT.localPosition,
@@ -124,6 +118,11 @@ public class StateView : FSM<StateView.state>
 		rt.anchorMin = rt.anchorMax = Vector2.one * 0.5f;
 		rt.anchoredPosition = rect.position;
 		rt.sizeDelta = rect.size;
+		if (canvasScaler != null)
+		{
+			var ratio = canvasScaler.referenceResolution / new Vector2(Screen.width, Screen.height);
+			rt.localScale = Vector3.one * Mathf.Max(ratio.x, ratio.y);
+		}
 	}
 	
 	public void Show(UnityAction callback = null)
