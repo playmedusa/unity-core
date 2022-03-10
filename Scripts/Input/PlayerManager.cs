@@ -14,12 +14,19 @@ public class PlayerManager : MonoBehaviour
 {
     public bool allowP0AutoSwitch = true;
     
-    private PlayerInput _playerInput;
+    public PlayerInput _playerInput;
+    public int playerIndex { get; private set; }
+    public bool isDeviceReady => _isDeviceReady;
+    private bool _isDeviceReady = true;
+    
     private IInputActionCollection _controls;
     private Type currentActionMap;
 
     private static List<PlayerManager> players;
     public static int count => players?.Count ?? 0;
+    
+    public static Action onNewPlayer;
+    public static Action onDeviceUpdated;
 
     public static PlayerManager GetPlayer(int index)
     {
@@ -31,6 +38,16 @@ public class PlayerManager : MonoBehaviour
         {
             return null;
         }
+    }
+
+    public static bool AllPlayersReady()
+    {
+        if (count == 0) return false;
+        foreach (var playerManager in players)
+        {
+            if (playerManager._playerInput.devices.Count == 0) return false;
+        }
+        return true;
     }
 
     public static async Task<PlayerManager> GetPlayerAsync(int index)
@@ -49,14 +66,33 @@ public class PlayerManager : MonoBehaviour
             Debug.LogError("Missing PlayerInput component!");
             return;
         }
+        playerIndex = players.Count;
         players.Add(this);
+        onNewPlayer?.Invoke();
         gameObject.name = $"Player {_playerInput.playerIndex}";
         DontDestroyOnLoad(gameObject);
+        _playerInput.onDeviceLost += OnDeviceLost;
+        _playerInput.onDeviceRegained += OnDeviceRegained;
     }
-    
+
     private void OnDestroy()
     {
         players.Remove(this);
+        _playerInput.onDeviceLost -= OnDeviceLost;
+        _playerInput.onDeviceRegained -= OnDeviceRegained;
+    }
+
+    void OnDeviceLost(PlayerInput playerInput)
+    {
+        _isDeviceReady = false;
+        onDeviceUpdated?.Invoke();
+    }
+
+    async void OnDeviceRegained(PlayerInput playerInput)
+    {
+        _isDeviceReady = true;
+        await Task.Delay(500);
+        onDeviceUpdated?.Invoke();
     }
 
     public void SetupInputSystemUI(InputSystemUIInputModule uiInputModule)
