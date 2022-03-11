@@ -13,7 +13,7 @@ public class PlayerUI : MonoBehaviour
     async void Awake()
     {
         inputSystemUIInputModule = GetComponent<InputSystemUIInputModule>();
-        playerManager = await PlayerManager.GetPlayerAsync(playerIndex);
+        playerManager = await LobbyManager.GetPlayerAsync(playerIndex);
         playerManager.SetupInputSystemUI(inputSystemUIInputModule);
         Init();
     }

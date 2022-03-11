@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour, SampleControls.IAvatarActions
     
     async void Start()
     {
-        var playerManager = await PlayerManager.GetPlayerAsync(playerIndex);
+        var playerManager = await LobbyManager.GetPlayerAsync(playerIndex);
         if (inputSystemUIInputModule != null)
             playerManager.SetupInputSystemUI(inputSystemUIInputModule);
         playerManager.SetControls(new SampleControls());
@@ -31,13 +31,13 @@ public class PlayerController : MonoBehaviour, SampleControls.IAvatarActions
         if (!context.performed) return;
         
         ui.SetActive(true);
-        var playerManager = PlayerManager.GetPlayer(playerIndex);
+        var playerManager = LobbyManager.GetPlayer(playerIndex);
         playerManager.SwitchActionMap<SampleControls.UIActions>();
     }
 
     public void HideUI()
     {
-        var playerManager = PlayerManager.GetPlayer(playerIndex);
+        var playerManager = LobbyManager.GetPlayer(playerIndex);
         playerManager.SwitchActionMap<SampleControls.AvatarActions>();
         ui.SetActive(false);
     }

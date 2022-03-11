@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -16,83 +16,94 @@ public class PlayerManager : MonoBehaviour
     
     public PlayerInput _playerInput;
     public int playerIndex { get; private set; }
-    public bool isDeviceReady => _isDeviceReady;
-    private bool _isDeviceReady = true;
-    
-    private IInputActionCollection _controls;
-    private Type currentActionMap;
-
-    private static List<PlayerManager> players;
-    public static int count => players?.Count ?? 0;
-    
-    public static Action onNewPlayer;
-    public static Action onDeviceUpdated;
-
-    public static PlayerManager GetPlayer(int index)
+    public bool isDeviceReady => device != null && _isDeviceReady;
+    public InputDevice device
     {
-        try
+        get
         {
-            return players[index];
-        }
-        catch
-        {
+            if (_playerInput != null && _playerInput.devices.Count > 0) 
+                return _playerInput.devices[0];
             return null;
         }
     }
 
-    public static bool AllPlayersReady()
+    private bool _isDeviceReady = true;
+    
+    private IInputActionCollection _controls;
+    private Type currentActionMap;
+    
+    public Action onDeviceUpdated;
+
+    public void SetPlayerIndex(int index)
     {
-        if (count == 0) return false;
-        foreach (var playerManager in players)
-        {
-            if (playerManager._playerInput.devices.Count == 0) return false;
-        }
-        return true;
+        playerIndex = index;
     }
 
-    public static async Task<PlayerManager> GetPlayerAsync(int index)
-    {
-        await TaskExtensions.WaitUntil(() => count > index);
-        return GetPlayer(index);
-    }
-    
     void Awake ()
     {
-        players ??= new List<PlayerManager>();
-        
         _playerInput = GetComponent<PlayerInput>();
         if (_playerInput == null)
         {
             Debug.LogError("Missing PlayerInput component!");
             return;
         }
-        playerIndex = players.Count;
-        players.Add(this);
-        onNewPlayer?.Invoke();
+        LobbyManager.AddPlayerManager(this);
         gameObject.name = $"Player {_playerInput.playerIndex}";
         DontDestroyOnLoad(gameObject);
-        _playerInput.onDeviceLost += OnDeviceLost;
-        _playerInput.onDeviceRegained += OnDeviceRegained;
+        InputUser.onChange += InputUserOnChange;
+    }
+
+    private void InputUserOnChange(InputUser inputUser, InputUserChange inputUserChange, InputDevice inputDevice)
+    {
+        if (inputUser != _playerInput.user) return;
+        Debug.Log(inputUserChange);
+        switch (inputUserChange)
+        {
+            case InputUserChange.DevicePaired:
+            case InputUserChange.DeviceRegained:
+                SetDeviceStatus(true);
+                break;
+            case InputUserChange.DeviceUnpaired:
+                ++InputUser.listenForUnpairedDeviceActivity;
+                InputUser.onUnpairedDeviceUsed += OnUnpairedDeviceUsed;
+                SetDeviceStatus(false);
+                break;
+            case InputUserChange.DeviceLost:
+                SetDeviceStatus(false);
+                break;
+            case InputUserChange.Removed:
+                Destroy(gameObject);
+                break;
+        }
+    }
+
+    private void OnUnpairedDeviceUsed(InputControl usedControl, InputEventPtr arg2)
+    {
+        // Only react to button presses on unpaired devices.
+        //if (!(usedControl is ButtonControl))
+        //    return;
+
+        // Pair the device to a user.
+        if (device == null && InputUser.FindUserPairedToDevice(usedControl.device) == null)
+        {
+            InputUser.PerformPairingWithDevice(usedControl.device, _playerInput.user);
+            --InputUser.listenForUnpairedDeviceActivity;
+            InputUser.onUnpairedDeviceUsed -= OnUnpairedDeviceUsed;
+        }
+    }
+
+    async void SetDeviceStatus(bool isReady)
+    {
+        _isDeviceReady = isReady;
+        if (!isReady)
+            await Task.Delay(500);
+        onDeviceUpdated?.Invoke();
+        LobbyManager.onDeviceUpdated?.Invoke();
     }
 
     private void OnDestroy()
     {
-        players.Remove(this);
-        _playerInput.onDeviceLost -= OnDeviceLost;
-        _playerInput.onDeviceRegained -= OnDeviceRegained;
-    }
-
-    void OnDeviceLost(PlayerInput playerInput)
-    {
-        _isDeviceReady = false;
-        onDeviceUpdated?.Invoke();
-    }
-
-    async void OnDeviceRegained(PlayerInput playerInput)
-    {
-        _isDeviceReady = true;
-        await Task.Delay(500);
-        onDeviceUpdated?.Invoke();
+        InputUser.onChange -= InputUserOnChange;
     }
 
     public void SetupInputSystemUI(InputSystemUIInputModule uiInputModule)
