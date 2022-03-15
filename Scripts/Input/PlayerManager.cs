@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 #if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
