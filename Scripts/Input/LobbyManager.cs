@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
-
+#if ENABLE_INPUT_SYSTEM
 public class LobbyManager
 {
     
@@ -64,3 +62,4 @@ public class LobbyManager
     }
 
 }
+#endif
