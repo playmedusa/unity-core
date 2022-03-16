@@ -1,6 +1,7 @@
-using UnityEngine;
+using System;
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 public static class TweeningExtensionMethods
 {
@@ -29,7 +30,7 @@ public static class TweeningExtensionMethods
 		return Vector3.LerpUnclamped(targetPosition + offset, targetPosition, t);
 	}
 
-	public static Coroutine StartCoroutine(this UnityEngine.GameObject obj, IEnumerator coroutine)
+	public static Coroutine StartCoroutine(this GameObject obj, IEnumerator coroutine)
 	{
 		MonoBehaviour mb = obj.GetComponent<MonoBehaviour>();
 		if (mb == null)
@@ -37,7 +38,7 @@ public static class TweeningExtensionMethods
 		return mb.StartCoroutine(coroutine);
 	}
 
-	public static IEnumerator Tween01(this UnityEngine.Object obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	public static IEnumerator Tween01(this Object obj, Action<float> step, float animationTime, Action callback = null)
 	{
 		float elapsedTime = 0;
 		while (elapsedTime < animationTime)
@@ -51,36 +52,38 @@ public static class TweeningExtensionMethods
 			callback();
 	}
 
-	public static Coroutine DoTween01(this UnityEngine.Component c, System.Action<float> step, float animationTime, System.Action callback = null)
+	public static Coroutine DoTween01(this MonoBehaviour c, Action<float> step, float animationTime, Action callback = null)
 	{
-		return c.gameObject.DoTween01(step, animationTime, callback);
+		IEnumerator tween = c.gameObject.Tween01(step, animationTime, callback);
+		return c.StartCoroutine(tween);
 	}
 
-	public static Coroutine DoTween01(this UnityEngine.GameObject obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	public static Coroutine DoTween01(this GameObject obj, Action<float> step, float animationTime, Action callback = null)
 	{
 		IEnumerator tween = obj.Tween01(step, animationTime, callback);
 		return obj.StartCoroutine(tween);
 	}
 	
-	public static IEnumerator DelayedTween01(this UnityEngine.Object obj, System.Action<float> step, float animationTime, float delayTime, System.Action callback = null)
+	public static IEnumerator DelayedTween01(this Object obj, Action<float> step, float animationTime, float delayTime, Action callback = null)
 	{
 		step(0f);
 		yield return new WaitForSeconds(delayTime);
 		yield return obj.Tween01( step, animationTime, callback);
 	}
 	
-	public static Coroutine DoDelayedTween01(this UnityEngine.Component c, System.Action<float> step, float animationTime, float delayTime, System.Action callback = null)
+	public static Coroutine DoDelayedTween01(this MonoBehaviour c, Action<float> step, float animationTime, float delayTime, Action callback = null)
 	{
-		return c.gameObject.DoDelayedTween01(step, animationTime, delayTime, callback);
+		IEnumerator tween = c.DelayedTween01(step, animationTime, delayTime, callback);
+		return c.StartCoroutine(tween);
 	}
 	
-	public static Coroutine DoDelayedTween01(this UnityEngine.GameObject obj, System.Action<float> step, float animationTime, float delayTime, System.Action callback = null)
+	public static Coroutine DoDelayedTween01(this GameObject obj, Action<float> step, float animationTime, float delayTime, Action callback = null)
 	{
 		IEnumerator tween = obj.DelayedTween01(step, animationTime, delayTime, callback);
 		return obj.StartCoroutine(tween);
 	}
 
-	public static IEnumerator UnscaledTween01(this UnityEngine.Object obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	public static IEnumerator UnscaledTween01(this Object obj, Action<float> step, float animationTime, Action callback = null)
 	{
 		float elapsedTime = 0;
 		while (elapsedTime < animationTime)
@@ -94,12 +97,13 @@ public static class TweeningExtensionMethods
 			callback();
 	}
 
-	public static Coroutine DoUnscaledTween01(this UnityEngine.Component c, System.Action<float> step, float animationTime, System.Action callback = null)
+	public static Coroutine DoUnscaledTween01(this MonoBehaviour c, Action<float> step, float animationTime, Action callback = null)
 	{
-		return c.gameObject.DoUnscaledTween01(step, animationTime, callback);
+		IEnumerator tween = c.UnscaledTween01(step, animationTime, callback);
+		return c.StartCoroutine(tween);
 	}
 
-	public static Coroutine DoUnscaledTween01(this UnityEngine.GameObject obj, System.Action<float> step, float animationTime, System.Action callback = null)
+	public static Coroutine DoUnscaledTween01(this GameObject obj, Action<float> step, float animationTime, Action callback = null)
 	{
 		IEnumerator tween = obj.UnscaledTween01(step, animationTime, callback);
 		return obj.StartCoroutine(tween);
