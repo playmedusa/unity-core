@@ -1,7 +1,10 @@
+#if ENABLE_INPUT_SYSTEM
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
+
 public class LobbyManager
 {
     
