@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour
     private void InputUserOnChange(InputUser inputUser, InputUserChange inputUserChange, InputDevice inputDevice)
     {
         if (inputUser != _playerInput.user) return;
-        Debug.Log(inputUserChange);
+
         switch (inputUserChange)
         {
             case InputUserChange.DevicePaired:

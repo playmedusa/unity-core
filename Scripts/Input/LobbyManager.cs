@@ -1,7 +1,10 @@
+#if ENABLE_INPUT_SYSTEM
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
+
 public class LobbyManager
 {
     
@@ -10,17 +13,6 @@ public class LobbyManager
     
     public static readonly List<PlayerManager> players = new();
     public static int count => players?.Count ?? 0;
-    
-    public static bool AllPlayersReady()
-    {
-        if (count == 0) return false;
-        foreach (var playerManager in players)
-        {
-            if (!playerManager.isDeviceReady)
-                return false;
-        }
-        return true;
-    }
 
     public static bool IsPlayerReady(int playerIndex)
     {
