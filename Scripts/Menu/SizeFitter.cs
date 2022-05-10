@@ -22,7 +22,8 @@ public class SizeFitter : MonoBehaviour
 	public float maxHeight;
 	public float minXPadding;
 	public float minYPadding;
-
+	public bool  useDPIScale;
+	public float refDPI = 460; 
 	public float refAspect = 16f / 9f;
 
 	public bool force;
@@ -68,6 +69,9 @@ public class SizeFitter : MonoBehaviour
 		float minHeight = 0;
 		float unscaledScreenWidth = canvasRectTransform.sizeDelta.x;
 		float unscaledScreenHeight = canvasRectTransform.sizeDelta.y;
+
+		float dpiScale = Screen.dpi / refDPI;
+		if (!useDPIScale) dpiScale = 1;
 		
 		float screenAspect = unscaledScreenWidth / unscaledScreenHeight;
 		float scaleFactor = screenAspect / refAspect;
@@ -79,8 +83,8 @@ public class SizeFitter : MonoBehaviour
 		if (minHeight < 0) minHeight = 0;
 
 
-		float width = Mathf.Clamp(unscaledScreenWidth * scaleFactor, minWidth, maxWidth);
-		float height = Mathf.Clamp(unscaledScreenHeight * scaleFactor, minHeight, maxHeight);
+		float width = Mathf.Clamp(unscaledScreenWidth * scaleFactor, minWidth, maxWidth) * dpiScale;
+		float height = Mathf.Clamp(unscaledScreenHeight * scaleFactor, minHeight, maxHeight) * dpiScale;
 
 		if (width <= maxWidth)
 		{
