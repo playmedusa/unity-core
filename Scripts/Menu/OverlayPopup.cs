@@ -128,6 +128,14 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		fsm.ChangeState(states.showMessage);
 	}
 	
+	public void ShowError(string title, string message, Action callback = null)
+	{
+		this.callback = callback;
+		messageTitle.text = I18n.t(title);
+		messageBody.text = I18n.t(message);
+		fsm.ChangeState(states.showMessage);
+	}
+	
 	public async Task ShowErrorAsync(string message)
 	{
 		ShowError(message);
