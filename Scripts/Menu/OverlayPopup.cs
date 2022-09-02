@@ -12,6 +12,7 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		closed,
 		loading,
 		showMessage,
+		showLargeMessage,
 		showChoose,
 		showInput
 	}
@@ -38,6 +39,11 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	public RectTransform messagePopup;
 	public TextMeshProUGUI messageTitle;
 	public TextMeshProUGUI messageBody;
+	
+	[Header("Large Message popup")]
+	public RectTransform xlMessagePopup;
+	public TextMeshProUGUI xlMessageTitle;
+	public TextMeshProUGUI xlMessageBody;
 
 	[Header("Choose popup")]
 	public RectTransform choosePopup;
@@ -88,6 +94,7 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		_instance.fsm = new FSMObject<states>(_instance);
 		_instance.loadingPopup.anchoredPosition = Vector3.down * _instance.screenOffset;
 		_instance.messagePopup.anchoredPosition = Vector3.down * _instance.screenOffset;
+		_instance.xlMessagePopup.anchoredPosition = Vector3.down * _instance.screenOffset;
 		_instance.choosePopup.anchoredPosition = Vector3.down * _instance.screenOffset;
 
 		_instance.background.interactable = false;
@@ -118,6 +125,20 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	{
 		ShowMessage(title, message);
 		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showMessage);
+	}
+
+	public void ShowLargeMessage(string title, string message, Action callback = null)
+	{
+		this.callback = callback;
+		xlMessageTitle.text = I18n.t(title);
+		xlMessageBody.text = I18n.t(message);
+		fsm.ChangeState(states.showLargeMessage);
+	}
+	
+	public async Task ShowLargeMessageAsync(string title, string message)
+	{
+		ShowLargeMessage(title, message);
+		await TaskExtensions.WaitUntil(() => fsm.currentState != states.showLargeMessage);
 	}
 
 	public void ShowError(string message, Action callback = null)
@@ -268,6 +289,12 @@ public class OverlayPopup : Singleton<OverlayPopup>
 	IEnumerator showMessage()
 	{
 		yield return StartCoroutine(showView(messagePopup, states.showMessage));
+		callback?.Invoke();
+	}
+	
+	IEnumerator showLargeMessage()
+	{
+		yield return StartCoroutine(showView(xlMessagePopup, states.showLargeMessage));
 		callback?.Invoke();
 	}
 
