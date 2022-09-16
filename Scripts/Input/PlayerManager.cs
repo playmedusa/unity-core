@@ -146,7 +146,7 @@ public class PlayerManager : MonoBehaviour
         _playerInput.neverAutoSwitchControlSchemes = _playerInput.playerIndex > 0 || !allowP0AutoSwitch;
     }
 
-    void DisableCurrentActionMap()
+    public void DisableCurrentActionMap()
     {
         _playerInput.actions.Disable();
         if (_controls == null)
