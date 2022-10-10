@@ -1,11 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System;
 
 public class FSMObject<T>
 {

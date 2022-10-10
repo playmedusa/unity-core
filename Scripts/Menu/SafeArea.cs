@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 
 [ExecuteInEditMode]
 public class SafeArea : MonoBehaviour
