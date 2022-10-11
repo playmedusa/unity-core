@@ -86,7 +86,7 @@ public class SceneLoader : MonoBehaviour
 		yield return this.DoUnscaledTween01(t =>
 		{
 			if (music != null)
-				music.volume = PennerAnimation.CubicEaseOut(t, 0, 1, 1);
+				music.volume = PennerAnimation.CubicEaseOut(t, 1, -1, 1);
 			fadeCanvasGroup.alpha = PennerAnimation.QuadEaseInOut(t, 0, 1, 1);
 		}, animationTime, () =>
 		{

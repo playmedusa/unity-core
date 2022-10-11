@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using Random = UnityEngine.Random;
 
 public partial class AudioInstance : Singleton<AudioInstance>
 {
@@ -10,10 +12,25 @@ public partial class AudioInstance : Singleton<AudioInstance>
 	static float volume = 1;
 	static partial void UpdateVolume();
 
+	private void Awake()
+	{
+		Init();
+	}
+
 	override protected void Init()
 	{
+		if (instance != this)
+		{
+			Destroy(gameObject);
+			return;
+		}
+		
+		DontDestroyOnLoad(instance.gameObject);
+		
 		playerClipAtPointStamp = new Dictionary<string, float>();
-		aSource = gameObject.AddComponent<AudioSource>();
+		aSource = GetComponent<AudioSource>();
+		if (aSource == null)
+			aSource = gameObject.AddComponent<AudioSource>();
 	}
 
 	static public void PlayOneShot(AudioClip clip, Vector3 position)
@@ -58,6 +75,34 @@ public partial class AudioInstance : Singleton<AudioInstance>
 		if (purge)
 			Destroy(tempGO, clip.length);
 		return aSource;
+	}
+
+	public static void CrossFadeAndLoop(AudioClip clip, float fadeTime = 1)
+	{
+		var newAudioSource = instance.gameObject.AddComponent<AudioSource>();
+		newAudioSource.volume = 0;
+		newAudioSource.clip = clip;
+		newAudioSource.outputAudioMixerGroup = instance.aSource.outputAudioMixerGroup;
+		newAudioSource.loop = true;
+		newAudioSource.Play();
+		instance.DoTween01(t =>
+		{
+			instance.aSource.volume = 1 - t;
+			newAudioSource.volume = t;
+		}, fadeTime, () =>
+		{
+			var old = instance.aSource;
+			instance.aSource = newAudioSource;
+			Destroy(old);
+		});
+	}
+
+	public static void FadeOutAndDestroy()
+	{
+		instance.DoTween01(t =>
+		{
+			instance.aSource.volume = 1 - t;
+		}, 1, () => Destroy(instance.gameObject));
 	}
 
 }
