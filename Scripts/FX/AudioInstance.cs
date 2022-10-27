@@ -76,14 +76,14 @@ public partial class AudioInstance : Singleton<AudioInstance>
 			Destroy(tempGO, clip.length);
 		return aSource;
 	}
-
-	public static void CrossFadeAndLoop(AudioClip clip, float fadeTime = 1)
+	
+	public static void CrossFade(AudioClip clip, bool loop = true, float fadeTime = 1)
 	{
 		var newAudioSource = instance.gameObject.AddComponent<AudioSource>();
 		newAudioSource.volume = 0;
 		newAudioSource.clip = clip;
 		newAudioSource.outputAudioMixerGroup = instance.aSource.outputAudioMixerGroup;
-		newAudioSource.loop = true;
+		newAudioSource.loop = loop;
 		newAudioSource.Play();
 		instance.DoTween01(t =>
 		{
