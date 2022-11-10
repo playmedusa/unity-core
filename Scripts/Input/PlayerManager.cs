@@ -32,8 +32,8 @@ public class PlayerManager : MonoBehaviour
 
     private bool _isDeviceReady = true;
     
-    private IInputActionCollection _controls;
-    private Type currentActionMap;
+    public IInputActionCollection _controls { get; private set; }
+    public Type currentActionMap { get; private set; }
     
     public Action onDeviceUpdated;
 
@@ -188,7 +188,7 @@ public class PlayerManager : MonoBehaviour
             return;
         }
         
-        Debug.Log($"Enabling {typeof(T).Name}");
+        //Debug.Log($"Enabling {typeof(T).Name}");
         _playerInput.actions.Disable();
         var wrapper = GetWrapper<T>(_controls);
         var enable= wrapper.GetType().GetMethod("Enable");
