@@ -83,9 +83,11 @@ namespace Mgl
 
 		public static void SetLocale(string newLocale = null)
 		{
+			PlayerPrefs.SetString("Language", newLocale);
 			instance.Configure(newLocale: newLocale);
 			localeId = Array.FindIndex(instance.locales, w => w == instance._currentLocale);
 			instance.OnLanguageChanged?.Invoke();
+			
 		}
 
 		public static void SetPath(string localePath = null)

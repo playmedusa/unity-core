@@ -16,7 +16,8 @@ public class LobbyManager
 
     public static bool IsPlayerReady(int playerIndex)
     {
-        return (bool)GetPlayer(playerIndex)?.isDeviceReady;
+        PlayerManager playerManager = GetPlayer(playerIndex);
+        return playerManager != null &&  playerManager.isDeviceReady && playerManager.isPlayerReady;
     }
 
     public static void AddPlayerManager(PlayerManager playerManager)

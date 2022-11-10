@@ -17,9 +17,11 @@ public class SceneLoader : MonoBehaviour
 				_instance = FindObjectOfType<SceneLoader>();
 			if (_instance == null)
 			{
-				GameObject go = Instantiate(Resources.Load("SceneLoader") as GameObject);
-				go.name = "SceneLoader";
-				_instance = go.GetComponent<SceneLoader>();
+				var res = Resources.Load("SceneLoader", typeof(GameObject)) as GameObject;
+				if (res == null)
+					res = Resources.Load("SceneLoader_Default", typeof(GameObject)) as GameObject;
+				res.name = "SceneLoader";
+				_instance = res.GetComponent<SceneLoader>();
 			}
 			return _instance;
 		}

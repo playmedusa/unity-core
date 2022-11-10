@@ -17,6 +17,9 @@ public class PlayerManager : MonoBehaviour
     public PlayerInput _playerInput;
     public int playerIndex { get; private set; }
     public bool isDeviceReady => device != null && _isDeviceReady;
+
+    public bool isPlayerReady;
+    
     public InputDevice device
     {
         get
@@ -151,7 +154,7 @@ public class PlayerManager : MonoBehaviour
         _playerInput.actions.Disable();
         if (_controls == null)
         {
-            Debug.LogError("Call SetControls first to initialize");
+            Debug.LogError("Disable Current Action Map: Call SetControls first to initialize");
             return;
         }
         
@@ -169,7 +172,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (_controls == null)
         {
-            Debug.LogError("Call SetControls first to initialize");
+            Debug.LogError("Bind Controls: Call SetControls first to initialize");
             return;
         }
         var wrapper = GetWrapper<T>(_controls);
@@ -181,7 +184,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (_controls == null)
         {
-            Debug.LogError("Call SetControls first to initialize");
+            Debug.LogError("Switch Action Map: Call SetControls first to initialize ");
             return;
         }
         
