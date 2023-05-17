@@ -214,7 +214,7 @@ public class StateView : FSM<StateView.state>
 	{
 		if (canvasGroup == null) yield break;
 		
-		yield return this.DoTween01(t =>
+		yield return this.UnscaledTween01(t =>
 		{
 			canvasGroup.alpha = Mathf.Lerp(0, 1, t);
 		}, animationTime);
@@ -225,7 +225,7 @@ public class StateView : FSM<StateView.state>
 		if (canvasGroup == null) yield break;
 		
 		float startAlpha = canvasGroup.alpha;
-		yield return this.DoTween01(t =>
+		yield return this.UnscaledTween01(t =>
 		{
 			canvasGroup.alpha = Mathf.Lerp(startAlpha, 0, t);
 		}, animationTime * 0.5f);
