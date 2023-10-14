@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -33,8 +34,9 @@ public class SceneLoader : MonoBehaviour
 	public float fadeInDelay;
 	public float defaultFadeTime = 0.5f;
 	public UnityEvent onTimeOut;
-	public Text loadingText;
+	public TextMeshProUGUI loadingText;
 	public bool showLoadingTextOnFadeIn;
+    
 	void Awake()
 	{
 		fadeCanvasGroup = GetComponent<CanvasGroup>();
@@ -70,7 +72,7 @@ public class SceneLoader : MonoBehaviour
 		StartCoroutine(FadeIn(defaultFadeTime));
 	}
 
-	IEnumerator FadeIn(float animationTime)
+	protected virtual IEnumerator FadeIn(float animationTime)
 	{
 		fadeCanvasGroup.alpha = 1.0f;
 		yield return new WaitForSeconds(fadeInDelay);
@@ -80,7 +82,7 @@ public class SceneLoader : MonoBehaviour
 		}, animationTime);
 	}
 
-	IEnumerator FadeOutAndLoad(string sceneName, float animationTime, float waitTime, Action callback = null)
+	protected virtual IEnumerator FadeOutAndLoad(string sceneName, float animationTime, float waitTime, Action callback = null)
 	{
 		fadeCanvasGroup.alpha = 0;
 		if (loadingText != null)
