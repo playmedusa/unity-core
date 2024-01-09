@@ -87,7 +87,13 @@ public class PlayerManager : MonoBehaviour
         //    return;
 
         // Pair the device to a user.
-        if (device == null && InputUser.FindUserPairedToDevice(usedControl.device) == null)
+        Debug.Log("Unpaired device: " + device + " " + usedControl);
+        if (SetupPlayersView.requiredPlayers == 1 && playerIndex == 0 && allowP0AutoSwitch)
+        {
+            InputUser.PerformPairingWithDevice(usedControl.device, _playerInput.user, InputUserPairingOptions.UnpairCurrentDevicesFromUser);
+            _playerInput.SwitchCurrentControlScheme(usedControl.device);
+        }
+        else if (device == null && InputUser.FindUserPairedToDevice(usedControl.device) == null)
         {
             InputUser.PerformPairingWithDevice(usedControl.device, _playerInput.user);
             --InputUser.listenForUnpairedDeviceActivity;
@@ -106,7 +112,9 @@ public class PlayerManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        InputUser.onChange -= InputUserOnChange;
+        InputUser.onChange -= InputUserOnChange; 
+        InputUser.onUnpairedDeviceUsed -= OnUnpairedDeviceUsed;
+        LobbyManager.RemovePlayerManager(this);
     }
 
     public void SetupInputSystemUI(InputSystemUIInputModule uiInputModule)
