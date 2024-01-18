@@ -1,4 +1,5 @@
 #if ENABLE_INPUT_SYSTEM
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
 
@@ -9,15 +10,23 @@ public class PlayerUI : MonoBehaviour
     
     protected InputSystemUIInputModule inputSystemUIInputModule;
     protected PlayerManager playerManager;
-
+    
     async void Awake()
     {
         inputSystemUIInputModule = GetComponent<InputSystemUIInputModule>();
-        playerManager = await LobbyManager.GetPlayerAsync(playerIndex);
-        playerManager.SetupInputSystemUI(inputSystemUIInputModule);
-        Init();
+        await SetUIPlayerOwner(0);
     }
 
+    public async Task SetUIPlayerOwner(int index)
+    {
+        playerManager = await LobbyManager.GetPlayerAsync(index);
+        playerManager.SetupInputSystemUI(inputSystemUIInputModule);
+        
+        //ONLY WORKS FOR 2 PLAYERS
+        playerManager = await LobbyManager.GetPlayerAsync((index + 1) % 2);
+        playerManager?.SetupInputSystemUI(null);
+    }
+    
     protected virtual void Init()
     {
         /*
