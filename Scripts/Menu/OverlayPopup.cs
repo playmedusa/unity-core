@@ -5,7 +5,7 @@ using Mgl;
 using TMPro;
 using UnityEngine;
 
-public class OverlayPopup : Singleton<OverlayPopup>
+public partial class OverlayPopup : Singleton<OverlayPopup>
 {
 	enum states
 	{
@@ -14,7 +14,8 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		showMessage,
 		showLargeMessage,
 		showChoose,
-		showInput
+		showInput,
+		partials
 	}
 	FSMObject<states> fsm;
 	bool initialized = false;
@@ -102,8 +103,11 @@ public class OverlayPopup : Singleton<OverlayPopup>
 		_instance.background.alpha = 0;
 
 		_instance.initialized = true;
+		PartialInit();
 		Destroy(gameObject);
 	}
+
+	partial void PartialInit();
 
 	public void ShowLoading()
 	{
