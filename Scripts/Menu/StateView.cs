@@ -29,8 +29,7 @@ public class StateView : FSM<StateView.state>
 	public bool skipAutoselect;
 	public bool ignoreSafeArea;
 	public GameObject m_PreviouslySelected;
-	
-	public float fadeAnimationTime = 0.1f;
+	public float animationTime = 1;
 
 	IInitView iInitView;
 	ISetupView iSetupView;
@@ -218,7 +217,7 @@ public class StateView : FSM<StateView.state>
 		yield return this.UnscaledTween01(t =>
 		{
 			canvasGroup.alpha = Mathf.Lerp(0, 1, t);
-		}, fadeAnimationTime);
+		}, animationTime);
 	}
 
 	public virtual IEnumerator Close()
@@ -229,7 +228,7 @@ public class StateView : FSM<StateView.state>
 		yield return this.UnscaledTween01(t =>
 		{
 			canvasGroup.alpha = Mathf.Lerp(startAlpha, 0, t);
-		}, fadeAnimationTime * 0.5f);
+		}, animationTime * 0.5f);
 	}
 
 }
