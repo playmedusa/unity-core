@@ -39,6 +39,9 @@ public class SafeArea : MonoBehaviour
         Vector2 anchorMax = r.position + r.size;
         anchorMin.x /= Screen.width;
         anchorMin.y /= Screen.height;
+        #if UNITY_ANDROID
+        anchorMin.y += 0.025f;
+        #endif
         anchorMax.x /= Screen.width;
         anchorMax.y /= Screen.height;
         Panel.anchorMin = anchorMin;
