@@ -29,7 +29,8 @@ public class StateView : FSM<StateView.state>
 	public bool skipAutoselect;
 	public bool ignoreSafeArea;
 	public GameObject m_PreviouslySelected;
-	public float animationTime = 1;
+	
+	public float animationTime = 0.1f;
 
 	IInitView iInitView;
 	ISetupView iSetupView;
